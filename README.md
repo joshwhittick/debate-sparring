@@ -81,7 +81,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 
 ## Status
 
-- 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge) and passes `--selftest --audio` on a real recording.
+- 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge). The default model changed to `gemini-3.1-flash-lite`, which passes the full self-test including `--audio` on a real recording (that run cost $0.017).
 - TODO:
   - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
   - Decide which of the 14 items from the gap analysis to add.
