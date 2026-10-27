@@ -25,7 +25,10 @@ Two front ends share one core (`core.py`) and one database:
 | `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
 | `data/objections.json` | Objection bank: 40 items, all `reviewed: false`. The only tracked file in `data/` |
 | `data/` (gitignored) | `sparring.db`, `audio/`, plus the review reports `bank_review_2026-10-27.md` and `site_gap_analysis_2026-10-27.md` |
-| `tests/` | `test_app.py`, `e2e_stub.py`, `selftest.json`; `fixtures/` holds a gitignored recording |
+| `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` (browser), `selftest.json`; `fixtures/` holds a gitignored recording |
+| `requirements.txt`, `.env.example` | Python packages; env template (copy to `.env`, gitignored) |
+| `logs/` (gitignored) | `app.log`, rotating; ids, timings and cost only |
+| `CLAUDE.md` | Agent context |
 | `research/carnismdebunked/` | Scraper and local copy of carnismdebunked.com (see Research material) |
 | `debate-sparring-mvp-prd.md` | The PRD the app was built from |
 | `TIDY_2026-10-27.md` | Tidy log |
