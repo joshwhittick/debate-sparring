@@ -46,7 +46,7 @@ At startup either front end validates the objection bank, then checks the key wi
 
 ### Streamlit Community Cloud
 
-1. Push this repo to GitHub (it has no remote yet).
+1. The repo is on GitHub: `joshwhittick/debate-sparring` (private, personal account).
 2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`.
 3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key and an `APP_PASSWORD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
 
@@ -108,7 +108,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge). The default model changed to `gemini-3.1-flash-lite`, which passes the full self-test including `--audio` on a real recording (that run cost $0.017).
 - 2026-10-27: Streamlit front end added. Shared logic moved from `app.py` into `core.py`; the FastAPI routes and responses are unchanged (`test_app.py` and `e2e_stub.py` pass).
 - TODO:
-  - Deploy to Streamlit Cloud (needs a GitHub remote first).
+  - Deploy to Streamlit Cloud from `joshwhittick/debate-sparring`.
   - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
   - Decide which of the 14 items from the gap analysis to add.
   - Rewrite the `tests/selftest.json` answers yourself.
