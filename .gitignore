@@ -4,3 +4,6 @@ data/*
 !data/objections.json
 __pycache__/
 *.pyc
+
+# Personal voice recordings used as test fixtures
+tests/fixtures/*.webm
