@@ -17,7 +17,7 @@ DB_PATH = DATA_DIR / "sparring.db"
 OBJECTIONS_PATH = DATA_DIR / "objections.json"
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite").strip()
 GEMINI_TIER = os.getenv("GEMINI_TIER", "free").strip().lower()
 # Opt-in: on the free tier Google may use and human-review recordings (see README).
 VOICE_ON_FREE_TIER = os.getenv("VOICE_ON_FREE_TIER", "").strip() == "1"

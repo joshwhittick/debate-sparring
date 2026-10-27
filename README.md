@@ -33,7 +33,7 @@ At startup the app validates the objection bank, then checks the key with a one-
 | `.env` | Meaning |
 |---|---|
 | `GEMINI_API_KEY` | Required |
-| `GEMINI_MODEL` | Code default `gemini-3.8-flash`. `gemini-3.5-flash-lite` passed the self-test and is fastest (recommended). `gemini-2.5-flash-lite` is closed to new users |
+| `GEMINI_MODEL` | Default `gemini-3.1-flash-lite`, the cheapest model that passes the self-test ($0.25 / $1.50 per 1M tokens). `gemini-3.5-flash-lite` also passes. `gemini-2.5-flash-lite` is closed to new users |
 | `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled when this is `paid` |
 | `VOICE_ON_FREE_TIER` | `1` enables Speak mode on the free tier anyway. Your recordings may then be used and human-reviewed by Google |
 | `GEMINI_API_SURFACE` | Optional. Set to `generate_content` if `interactions.create` misbehaves |
