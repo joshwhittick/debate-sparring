@@ -48,6 +48,20 @@ Turn on Calibration mode on the start screen. On each answer you enter your own 
 
 Measured cost per round of 5: **not yet measured** (fill in after the first live round; History shows the total spend).
 
+## Research material
+
+`research/carnismdebunked/` holds a local copy of [carnismdebunked.com](https://www.carnismdebunked.com/): 12 content pages, about 25,800 words. It's reference material for reviewing and extending `data/objections.json`. Don't copy its wording into the bank.
+
+```
+python research/carnismdebunked/scrape_carnismdebunked.py fetch   # sitemap -> raw/*.html; resumable, 3 s between requests
+python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> pages/*.md (offline)
+```
+
+- The most useful pages are `general-ethical.md`, `health-nutrition.md`, `environmental.md` and `fallacies.md`. Each keeps 96-99% of the page's text.
+- `resources.md` and `your-country.md` lose about half their text, which was link grids and buttons.
+- Only the script is tracked in git. `raw/`, `pages/` and `logs/` are gitignored because the content is third-party.
+- The scrape ran on 2026-10-27 over a direct connection, at Josh's instruction.
+
 ## Credit
 
 The idea comes from a remark Jack Symes made on stream ([Jack v Halo - Part II, around 3:15:00](https://www.youtube.com/watch?v=kkw6ozdxli0&t=11700s)). This app is not affiliated with or endorsed by Jack Symes.

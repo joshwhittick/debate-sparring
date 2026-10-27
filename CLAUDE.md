@@ -12,3 +12,4 @@ Local vegan-debate practice app. Spec: `debate-sparring-mvp-prd.md` (milestones 
 - `tests/selftest.json` answers are Claude drafts for Josh to rewrite.
 - Never log answer text or transcripts. Never name Jack Symes in the UI.
 - Run `python tests/test_app.py` after backend changes, and `python tests/e2e_stub.py` after frontend changes.
+- `research/carnismdebunked/`: local scrape of carnismdebunked.com, used as reference for the bank. Only the script is tracked; the pages are gitignored. Never paste its wording into `data/objections.json`.

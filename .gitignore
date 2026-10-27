@@ -7,3 +7,8 @@ __pycache__/
 
 # Personal voice recordings used as test fixtures
 tests/fixtures/*.webm
+
+# Scraped third-party site content: keep out of git (copyright); only the scraper is tracked
+research/*/raw/
+research/*/pages/
+research/*/logs/
