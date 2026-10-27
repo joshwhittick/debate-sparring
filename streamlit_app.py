@@ -73,16 +73,25 @@ def is_public():
     return host.rsplit(":", 1)[0] not in LOCAL_HOSTS if host else True
 
 
+def app_password():
+    """Read live from st.secrets, so a password edited on Cloud applies without a reboot; .env otherwise."""
+    try:
+        return str(st.secrets.get("APP_PASSWORD", "")).strip() or config.APP_PASSWORD
+    except Exception:  # no secrets.toml: local run
+        return config.APP_PASSWORD
+
+
 def password_ok():
     if ss.get("authed"):
         return True
-    if not config.APP_PASSWORD:
+    expected = app_password()
+    if not expected:
         if is_public():
             st.error("APP_PASSWORD is not set. A public deploy needs one in the app's secrets.")
             return False
         return True
-    pw = st.text_input("Password", type="password")
-    if pw and hmac.compare_digest(pw.encode(), config.APP_PASSWORD.encode()):
+    pw = st.text_input("Password", type="password").strip()
+    if pw and hmac.compare_digest(pw.encode(), expected.encode()):
         ss.authed = True
         st.rerun()
     if pw:
