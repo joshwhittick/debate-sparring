@@ -2,6 +2,8 @@
 
 A practice tool for answering common objections to veganism under time pressure. Each round has 5 objections. You answer each one by typing or speaking, the AI pushes back once, you reply, and Gemini scores both turns on accuracy, logic, addressing the crux, concision and concession discipline. You also get tips and a model answer.
 
+**Live app: https://vegan-debate.streamlit.app/** (password protected).
+
 **Debate practice, not medical or dietary advice.**
 
 Two front ends share one core (`core.py`) and one database:
@@ -121,8 +123,8 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge). The default model changed to `gemini-3.1-flash-lite`, which passes the full self-test including `--audio` on a real recording (that run cost $0.017).
 - 2026-10-27: Streamlit front end added. Shared logic moved from `app.py` into `core.py`; the FastAPI routes and responses are unchanged (`test_app.py` and `e2e_stub.py` pass).
 - 2026-10-27: hardened for a public deploy: fail-closed public mode, answer and output caps, session and daily spend limits, generic errors, wrapper-tag escaping for unclosed tags. The PRD and tidy logs left git.
+- 2026-10-27: repo made public and deployed to Streamlit Community Cloud at https://vegan-debate.streamlit.app/ (main file `streamlit_app.py`).
 - TODO:
-  - Deploy to Streamlit Cloud from `joshwhittick/debate-sparring`.
   - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
   - Decide which of the 14 items from the gap analysis to add.
   - Rewrite the `tests/selftest.json` answers yourself.
