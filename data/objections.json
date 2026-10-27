@@ -1,0 +1,708 @@
+[
+  {
+    "id": "nature-01",
+    "category": "nature",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Lions, wolves and orcas eat other animals without anyone calling it evil, and humans descend from a long line of animals that hunted and scavenged. If killing animals for food were wrong in itself, it would be wrong everywhere in nature, yet nobody thinks a lion is doing something immoral. Eating meat is part of what we are.",
+    "text": "Lions eat meat, wolves eat meat, and our ancestors hunted for a very long time. Why would it suddenly be wrong when we do it?",
+    "key_points": [
+      "Separate what animals do from what moral agents ought to do: lions cannot reflect on alternatives or survive without meat",
+      "Address that humans can choose among diets and, in most places, can do well without animal products",
+      "Concede that eating meat is natural without letting 'natural' settle whether it is right"
+    ],
+    "sources": [
+      "Singer, P. (1975). Animal Liberation. New York Review / Random House.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "nature-02",
+    "category": "nature",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Humans have canine teeth, a digestive system that handles meat well, and a long record of eating it. The usual comparison with gorillas or cows is selective: our anatomy looks like that of a flexible omnivore, which suggests meat is a normal part of a human diet and not an addition to it.",
+    "text": "We've got canine teeth and we digest meat perfectly well. Doesn't our anatomy say we're omnivores?",
+    "key_points": [
+      "Concede that humans are physiologically capable omnivores",
+      "Explain that being able to digest meat does not make it necessary or morally permissible",
+      "Avoid leaning on the claim that human canines are small so we are herbivores, because teeth alone are weak evidence either way"
+    ],
+    "sources": [
+      "Ungar, P. S. (2012). Dental evidence for the reconstruction of diet in African early Homo. Current Anthropology 53(S6): S318-S329.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "nature-03",
+    "category": "nature",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Archaeological evidence for butchery goes back a very long way, and one influential hypothesis holds that animal foods and later cooking allowed the human gut to shrink while the brain grew. Even if we can live well on plants today, a diet that excludes animal foods cuts against the biology that made us the species we are.",
+    "text": "Eating meat and cooking food is a big part of why we evolved large brains. Isn't cutting out animal foods going against what made us human?",
+    "key_points": [
+      "Accept that animal foods and cooking plausibly played a role in human evolution, while noting how debated the size of that role is",
+      "Separate evolutionary origins from present nutritional need: what helped then is not required now, given modern food, fortification and supplements",
+      "Avoid claiming that early humans were vegan or that the evidence settles the question the other way"
+    ],
+    "sources": [
+      "Aiello, L. C. & Wheeler, P. (1995). The expensive-tissue hypothesis. Current Anthropology 36(2): 199-221.",
+      "Milton, K. (1999). A hypothesis to explain the role of meat-eating in human evolution. Evolutionary Anthropology 8(1): 11-21."
+    ]
+  },
+  {
+    "id": "nature-04",
+    "category": "nature",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Predation drives ecosystems, and humans, as apex omnivores, do what top species have always done. Choosing not to eat animals is a moral stance, but it should be presented as that and not as a return to anything natural. The natural order includes eating and being eaten.",
+    "text": "We're at the top of the food chain. That's just the natural order, so what's the problem?",
+    "key_points": [
+      "Separate the descriptive 'is' from the prescriptive 'ought' (the appeal to nature)",
+      "Note that people already reject many natural things and accept many unnatural ones, such as medicine",
+      "Address that industrial farming is a human-built system and not predation in the ecological sense"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)",
+      "Singer, P. (1975). Animal Liberation. New York Review / Random House."
+    ]
+  },
+  {
+    "id": "nature-05",
+    "category": "nature",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "If animal suffering matters in itself, nature is full of it: predation, parasites, starvation and disease. Vegans do not try to stop lions, which suggests the concern is selective and about discomfort with human action, not about suffering as such. A principle that only applies when humans are involved is a different principle.",
+    "text": "If you care so much about animal suffering, why aren't you trying to stop lions killing gazelles? Your ethics only seem to kick in when humans are involved.",
+    "key_points": [
+      "Distinguish duties not to harm from duties to rescue, and responsibility for one's own actions",
+      "Acknowledge that concern for wild animal suffering is a real philosophical position, and that practical limits on intervening are serious",
+      "Avoid romanticising nature or claiming that wild animals do not suffer"
+    ],
+    "sources": [
+      "Horta, O. (2010). Debunking the idyllic view of natural processes: population dynamics and suffering in the wild. Telos 17: 73-88."
+    ]
+  },
+  {
+    "id": "nature-06",
+    "category": "nature",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Our closest relatives are not strict herbivores. Chimpanzees hunt monkeys and eat insects, and most primates take some animal food when they can. The best reading of the evidence is that humans are opportunistic omnivores, and a fully plant-based diet is the outlier among primates.",
+    "text": "Chimps hunt and eat meat, and so do plenty of other primates. Isn't the natural primate diet mixed, not plant-only?",
+    "key_points": [
+      "Accept that chimpanzees and many primates eat some animal foods",
+      "Explain why primate behaviour is weak guidance for what humans ought to eat or do",
+      "Note that primate diets are mostly plant-based, without pretending that occasional meat-eating is irrelevant"
+    ],
+    "sources": [
+      "Stanford, C. B. (1996). The hunting ecology of wild chimpanzees: implications for the evolutionary ecology of Pliocene hominids. American Anthropologist 98(1): 96-113."
+    ]
+  },
+  {
+    "id": "nature-07",
+    "category": "nature",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "In many regions, predators have been removed and deer or other wild populations grow until they destroy woodland and starve. Culling is often the responsible management response. If culling is justified, eating the meat is better than wasting it, and hunters do real ecological work that vegans cannot replace.",
+    "text": "In a lot of places deer have to be culled because their predators are gone. If that's necessary, isn't eating the meat the responsible thing to do?",
+    "key_points": [
+      "Concede that culling can be ecologically justified in some places",
+      "Distinguish eating culled wildlife from supplying a general diet with farmed meat, which is not possible at that scale",
+      "Address that predator removal and human land use created the problem in the first place"
+    ],
+    "sources": [
+      "Cote, S. D., Rooney, T. P., Tremblay, J.-P., Dussault, C. & Waller, D. M. (2004). Ecological impacts of deer overabundance. Annual Review of Ecology, Evolution, and Systematics 35: 113-147."
+    ]
+  },
+  {
+    "id": "nature-08",
+    "category": "nature",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Cattle, sheep and chickens are the product of thousands of years of co-evolution with humans. As species they exist in vast numbers because people eat them, and a world without animal farming would see most of these breeds disappear. A relationship that benefits both sides at the species level is hard to call simple exploitation, and abolishing it is not obviously a kindness to the animals.",
+    "text": "Cows, sheep and chickens exist in huge numbers because humans eat them. Isn't that more like a partnership between species than exploitation?",
+    "key_points": [
+      "Distinguish species-level success from individual welfare, since interests belong to individual animals and not to breeds",
+      "Address that selective breeding has caused serious welfare problems in many farmed breeds",
+      "Explain why fewer farmed animals existing in future is or is not a harm to those animals"
+    ],
+    "sources": [
+      "Diamond, J. (2002). Evolution, consequences and future of plant and animal domestication. Nature 418: 700-707.",
+      "Matheny, G. & Chan, K. M. A. (2005). Human diets and animal welfare: the illogic of the larder argument. Journal of Agricultural and Environmental Ethics 18: 579-594."
+    ]
+  },
+  {
+    "id": "health-01",
+    "category": "health",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Animal protein contains all the essential amino acids in proportions close to what people need, and it is generally more digestible. Most plant proteins are lower in at least one essential amino acid and are digested less completely. Vegans can meet their needs, but only by planning in a way omnivores never have to.",
+    "text": "Plant protein is incomplete and less digestible than animal protein. Can you really get the same quality without meat?",
+    "key_points": [
+      "Accept that plant proteins differ from animal proteins in amino acid profile and digestibility on average",
+      "Explain that a varied mix of plant foods can meet requirements, and that complementary proteins do not need to be matched meal by meal",
+      "Avoid claiming that plant protein is identical to animal protein on every measure"
+    ],
+    "sources": [
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "FAO (2013). Dietary protein quality evaluation in human nutrition. FAO Food and Nutrition Paper 92.",
+      "Mariotti, F. & Gardner, C. D. (2019). Dietary protein and amino acids in vegetarian diets - a review. Nutrients 11(11): 2661.",
+      "van Vliet, S., Burd, N. A. & van Loon, L. J. C. (2015). The skeletal muscle anabolic response to plant- versus animal-based protein consumption. Journal of Nutrition 145(9): 1981-1991.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "health-02",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Vitamin B12 cannot be reliably obtained from unfortified plant foods, and deficiency can cause serious and sometimes irreversible harm. A diet that has to be topped up with a supplement or fortified food to avoid illness is not a complete diet. If it were truly suited to humans, it would not depend on technology to be safe.",
+    "text": "Vegans have to take B12 supplements or they get ill. Doesn't that prove it isn't a complete diet?",
+    "key_points": [
+      "Acknowledge that supplements or fortified foods are genuinely required, not optional",
+      "Note that B12 is made by microorganisms and that livestock are themselves often given B12 through feed or supplements",
+      "Address that needing a supplement is not the same as being unhealthy, since many diets rely on fortification"
+    ],
+    "sources": [
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "EFSA Panel on Dietetic Products, Nutrition and Allergies (2015). Scientific Opinion on Dietary Reference Values for cobalamin (vitamin B12). EFSA Journal 13(7): 4150.",
+      "Gilsing, A. M. J. et al. (2010). Serum concentrations of vitamin B12 and folate in British male omnivores, vegetarians and vegans: results from the EPIC-Oxford cohort study. European Journal of Clinical Nutrition 64: 933-939.",
+      "NHS. The vegan diet (NHS website, Live Well: Eat well).",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "health-03",
+    "category": "health",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Children are growing quickly and have less margin for error with energy, B12, iron, zinc, iodine and long-chain fatty acids. Professional bodies say well-planned vegan diets can be adequate, but 'well-planned' is doing a lot of work, and the person making the choice is the parent, not the child. Even a small rate of deficiency in this group can have lasting effects, so why accept the risk for someone who cannot consent?",
+    "text": "Children grow fast and can't consent. Even if vegan adults can manage, isn't it irresponsible to put a child on a diet where one planning mistake could cause lasting harm?",
+    "key_points": [
+      "State that well-planned vegan diets need B12 from supplements or fortified foods, and that families should consult a registered dietitian or doctor",
+      "Acknowledge the higher stakes during growth and development, and that the evidence base for children is thinner than for adults",
+      "Address the consent point: parents shape children's diets in every household, so compare risks with a poorly planned omnivore diet, without dismissing the risk"
+    ],
+    "sources": [
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "Sutter, D. O. & Bender, N. (2021). Nutrient status and growth in vegan children. Nutrition Research 91: 13-25.",
+      "Richter, M. et al. (2016). Vegan diet: position of the German Nutrition Society (DGE). Ernaehrungs Umschau 63(4): 92-102."
+    ]
+  },
+  {
+    "id": "health-04",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Iron and zinc in plant foods are absorbed less well, partly because phytates and other compounds bind them, and haem iron from meat is taken up more efficiently than non-haem iron. Vegans may therefore have lower iron stores and need to pay deliberate attention to food choices and preparation to keep up.",
+    "text": "Iron and zinc from plants are absorbed much less efficiently than from meat. Doesn't that put vegans at a real disadvantage?",
+    "key_points": [
+      "Accept that non-haem iron and zinc are less bioavailable on average",
+      "Explain that absorption adjusts when stores are low and can be improved through food choices and preparation",
+      "Note that iron deficiency also occurs in omnivores, while some vegan groups do show higher risk"
+    ],
+    "sources": [
+      "Hunt, J. R. (2003). Bioavailability of iron, zinc, and other trace minerals from vegetarian diets. American Journal of Clinical Nutrition 78(3 Suppl): 633S-639S.",
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "health-05",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Plants supply the short-chain omega-3 ALA, but humans convert only a limited amount to the long-chain forms EPA and DHA, which matter for the brain and the heart. Oily fish is the main dietary source, so vegans rely on algae-based supplements to fill a gap that omnivores fill with food.",
+    "text": "The omega-3s that matter, EPA and DHA, mostly come from fish. Plant sources convert poorly, so don't vegans need yet another supplement?",
+    "key_points": [
+      "Acknowledge that conversion of ALA to EPA and DHA is limited and varies between people",
+      "Note that algae provide EPA and DHA directly, and that fish accumulate them from algae",
+      "Avoid claiming that flaxseed or similar foods fully replace long-chain omega-3, and avoid treating the evidence for benefit as settled in every respect"
+    ],
+    "sources": [
+      "Burdge, G. C. & Calder, P. C. (2005). Conversion of alpha-linolenic acid to longer-chain polyunsaturated fatty acids in human adults. Reproduction Nutrition Development 45(5): 581-597.",
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980."
+    ]
+  },
+  {
+    "id": "health-06",
+    "category": "health",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Soy contains isoflavones, which act like weak oestrogens, and vegan diets often rely on soy heavily. Some people worry about hormonal effects, thyroid function and fertility. Building a diet that already needs careful planning on a food with those questions attached is a risk that meat-eaters do not take.",
+    "text": "Vegans live on soy, and soy is full of oestrogen-like compounds. Isn't that a hormone problem waiting to happen?",
+    "key_points": [
+      "Explain that isoflavones are plant compounds that are not equivalent to human oestrogen, and that clinical evidence in adults has generally not shown feminising effects",
+      "Acknowledge that research is not fully settled for every outcome and group, and that people with thyroid conditions should take medical advice",
+      "Note that a vegan diet does not have to depend on soy"
+    ],
+    "sources": [
+      "Messina, M. (2016). Soy and health update: evaluation of the clinical and epidemiologic literature. Nutrients 8(12): 754.",
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "health-07",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Large surveys find that most people who try a vegetarian or vegan diet eventually go back to eating meat. That attrition may signal that these diets are hard to sustain or leave some people feeling unwell, and individual accounts of fatigue and deficiency are too common to dismiss as people simply doing it wrong.",
+    "text": "Loads of people try veganism and quit because they feel awful. If it were a healthy default, would so many go back?",
+    "key_points": [
+      "Acknowledge that high lapse rates are documented and that some people report feeling unwell",
+      "Separate the reasons people stop (social difficulty, convenience, cravings, poor planning, deficiency) from whether a well-planned diet is adequate",
+      "Avoid dismissing individual experience as simply 'not doing it properly'"
+    ],
+    "sources": [
+      "Faunalytics (2014). Study of Current and Former Vegetarians and Vegans: Initial Findings.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "health-08",
+    "category": "health",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Claims that vegans are healthier rest largely on observational studies, and people who choose veganism tend to smoke less, drink less and exercise more. Statistical adjustment cannot remove all of that healthy-user bias, and some cohorts even show signals such as higher fracture or stroke risk. The evidence supports 'a diet rich in whole plant foods is good for you' much better than 'excluding animal foods is good for you'.",
+    "text": "The studies showing vegans are healthier are mostly observational and full of healthy-user bias. How do you know it's the lack of meat, not everything else vegans do?",
+    "key_points": [
+      "Accept that most of the evidence is observational and vulnerable to confounding",
+      "Distinguish a diet rich in whole plant foods from simply excluding animal products, noting that vegan junk food exists",
+      "Acknowledge the mixed findings (for example lower heart disease risk in some cohorts, higher fracture risk in some) without overclaiming either way"
+    ],
+    "sources": [
+      "Appleby, P. N. & Key, T. J. (2016). The long-term health of vegetarians and vegans. Proceedings of the Nutrition Society 75(3): 287-293.",
+      "Tong, T. Y. N. et al. (2019). Risks of ischaemic heart disease and stroke in meat eaters, fish eaters, and vegetarians over 18 years of follow-up: results from the prospective EPIC-Oxford study. BMJ 366: l4897.",
+      "Tong, T. Y. N. et al. (2020). Vegetarian and vegan diets and risks of total and site-specific fractures: results from the prospective EPIC-Oxford study. BMC Medicine 18: 353.",
+      "Bakaloudi, D. R. et al. (2021). Intake and adequacy of the vegan diet. A systematic review of the evidence. Clinical Nutrition 40(5): 3503-3521."
+    ]
+  },
+  {
+    "id": "ethics-01",
+    "category": "ethics",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Harvesting crops kills field mice, rabbits, snakes and ground-nesting birds, and pesticides and machinery kill many more small animals. A vegan diet is therefore not free of animal deaths, and the claim to be avoiding killing is overstated.",
+    "text": "Harvesting crops kills mice, rabbits and loads of other small animals. Doesn't that mean vegans have blood on their hands too?",
+    "key_points": [
+      "Concede that crop production causes animal deaths",
+      "Address that a large share of cropland grows feed for livestock, so animal agriculture generally needs more cropland per unit of food than eating plants directly",
+      "Distinguish foreseen but unintended harm from deliberate killing, and note that the aim is reducing harm, not achieving purity"
+    ],
+    "sources": [
+      "Fischer, B. & Lamey, A. (2018). Field deaths in plant agriculture. Journal of Agricultural and Environmental Ethics 31: 409-428.",
+      "Our World in Data. Land use of diets (ourworldindata.org/land-use-diets).",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-02",
+    "category": "ethics",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Plants respond to damage, release chemical alarm signals and communicate with each other through the soil. If the argument rests on avoiding suffering, we cannot be certain plants do not experience something, so the vegan line is drawn at a point that feels intuitive but is not clearly principled.",
+    "text": "Plants react to being damaged and even send out warning signals. How can you be so sure they don't feel pain?",
+    "key_points": [
+      "Distinguish responsiveness to stimuli from subjective experience, noting that plants have no nervous system or brain",
+      "Acknowledge residual uncertainty about plant sentience while explaining why it is far weaker than the evidence for animals",
+      "Note that even if plants did feel, eating plants directly would harm fewer of them than feeding them to animals first"
+    ],
+    "sources": [
+      "Taiz, L. et al. (2019). Plants neither possess nor require consciousness. Trends in Plant Science 24(8): 677-687.",
+      "Mallatt, J., Blatt, M. R., Draguhn, A., Robinson, D. G. & Taiz, L. (2021). Debunking a myth: plant consciousness. Protoplasma 258: 459-476.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-03",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "There is a real difference between a factory farm and a small pasture-based farm where animals live well and are killed quickly. Opposing the worst abuses is sensible, but treating a well-kept animal killed painlessly as morally equal to factory farming overstates the case. A good life ended humanely can be defended as better for the animal than the alternatives.",
+    "text": "I only buy high-welfare meat from a local farm where the animals have a good life. Surely that's ethically different from factory farming?",
+    "key_points": [
+      "Acknowledge that welfare differs enormously between systems and that high-welfare farming is better than intensive farming",
+      "Address whether killing an animal that would otherwise go on living is itself a harm, even if the death is painless",
+      "Address practical limits: how much high-welfare supply exists, whether labels match reality, and welfare issues in breeding, transport and slaughter"
+    ],
+    "sources": [
+      "Fraser, D. (2008). Understanding Animal Welfare: The Science in its Cultural Context. Wiley-Blackwell.",
+      "Mellor, D. J. (2016). Moving beyond the 'Five Freedoms' by updating the 'Five Provisions' and introducing aligned 'Animal Welfare Aims'. Animals 6(10): 59.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-04",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "If the reason to avoid animal products is sentience, bivalves such as mussels and oysters have no brain and almost certainly cannot suffer. By vegan logic they should be acceptable, and where vegans refuse them anyway it suggests that veganism works as an identity rule, not as a principle about harm.",
+    "text": "Oysters and mussels have no brain. If vegans care about suffering, why isn't eating them fine?",
+    "key_points": [
+      "Acknowledge that bivalves are plausibly consistent with a harm-based ethic and that some vegans accept them",
+      "Explain the uncertainty about sentience, and the difference between a principle and the simple bright-line rule most vegans adopt",
+      "Keep the environmental case for bivalve farming separate from the sentience question"
+    ],
+    "sources": [
+      "Birch, J., Burn, C., Schnell, A., Browning, H. & Crump, A. (2021). Review of the evidence of sentience in cephalopod molluscs and decapod crustaceans. London School of Economics and Political Science."
+    ]
+  },
+  {
+    "id": "ethics-05",
+    "category": "ethics",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "There is credible evidence that at least some insects can feel something like pain. If so, pesticides, harvesting and habitat conversion kill vast numbers of insects in any large-scale crop system, and vegans cannot claim the high ground on sentience while accepting that. If insects are not sentient, farming them for protein is a sustainable option that the vegan position does not clearly rule out. Either way the line looks hard to defend.",
+    "text": "Insects might be sentient, and farming kills them in enormous numbers. If sentience is your test, doesn't growing your food break your own rule? And if they aren't sentient, why not eat insects?",
+    "key_points": [
+      "Accept uncertainty about insect sentience and that arable farming kills many insects",
+      "Address proportionality: less cropland per unit of food generally means fewer insects affected, and harm reduction does not require perfection",
+      "Engage honestly with the fork, since uncertainty about sentience cuts both ways, instead of dodging the insect-farming half"
+    ],
+    "sources": [
+      "Gibbons, M., Crump, A., Barrett, M., Sarlak, S., Birch, J. & Chittka, L. (2022). Can insects feel pain? A review of the neural and behavioural evidence. Advances in Insect Physiology 63: 155-229.",
+      "New York Declaration on Animal Consciousness (2024).",
+      "Fischer, B. & Lamey, A. (2018). Field deaths in plant agriculture. Journal of Agricultural and Environmental Ethics 31: 409-428."
+    ]
+  },
+  {
+    "id": "ethics-06",
+    "category": "ethics",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Most farm animals would never have existed without farming. If a life worth living is better than no life at all, then raising animals well and then killing them can leave the animal better off than non-existence, which is exactly what universal veganism would deliver for those animals. The vegan has to explain why preventing a good life from starting is better.",
+    "text": "These animals wouldn't exist at all if we didn't eat them. If they have a decent life, isn't that better than never being born?",
+    "key_points": [
+      "Address whether non-existence harms or benefits anyone in the way harming an existing animal does",
+      "Distinguish the theory (a good life) from the practice, since most farmed animals live in intensive systems with poor welfare",
+      "Engage with replaceability views and with views where each individual's life matters, instead of treating the question as obvious"
+    ],
+    "sources": [
+      "Matheny, G. & Chan, K. M. A. (2005). Human diets and animal welfare: the illogic of the larder argument. Journal of Agricultural and Environmental Ethics 18: 579-594.",
+      "Visak, T. (2013). Killing Happy Animals: Explorations in Utilitarian Ethics. Palgrave Macmillan.",
+      "Singer, P. (1979). Practical Ethics. Cambridge University Press."
+    ]
+  },
+  {
+    "id": "ethics-07",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Rights and duties come as a package: we owe obligations to those who can take part in a moral relationship and respect ours. Animals cannot enter that relationship. We may owe them kindness and a duty not to be cruel, but that is not the same as the kind of rights that would make eating them wrong.",
+    "text": "Rights come with responsibilities, and animals can't take on any. Why would they have the same claim on us?",
+    "key_points": [
+      "Address the contractualist argument and the fact that human infants and some people with severe cognitive disabilities also cannot reciprocate",
+      "Distinguish moral agents, who have duties, from moral patients, whose interests matter",
+      "Acknowledge that giving animals moral status does not require equal status with humans"
+    ],
+    "sources": [
+      "Narveson, J. (1977). Animal rights. Canadian Journal of Philosophy 7(1): 161-178.",
+      "Regan, T. (1983). The Case for Animal Rights. University of California Press.",
+      "Scruton, R. (1996). Animal Rights and Wrongs. Demos.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-08",
+    "category": "ethics",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Steven Davis argued that a diet including grazed cattle could kill fewer animals per unit of food than a crop-based diet, because ploughing and harvesting kill many field animals and one cow supplies a lot of food. The estimates are contested, but the point stands: a least-harm principle does not obviously deliver veganism, and the vegan has to win the argument on the numbers.",
+    "text": "One grass-fed cow feeds a lot of people, while harvesting grain kills lots of small animals. By a least-harm standard, couldn't a bit of grazed beef be better than a vegan diet?",
+    "key_points": [
+      "Address the arithmetic: critics argue Davis's estimates left out feed crops, per-calorie comparisons and land use",
+      "Note that field deaths are hard to quantify and that a fair comparison includes animals killed for feed and wild animals displaced by pasture",
+      "Acknowledge that least harm is shared ground and that the conclusion depends on empirical data, not on the principle alone"
+    ],
+    "sources": [
+      "Davis, S. L. (2003). The least harm principle may require that humans consume a diet containing large herbivores, not a vegan diet. Journal of Agricultural and Environmental Ethics 16: 387-394.",
+      "Matheny, G. (2003). Least harm: a defense of vegetarianism from Steven Davis's omnivorous proposal. Journal of Agricultural and Environmental Ethics 16: 505-511.",
+      "Fischer, B. & Lamey, A. (2018). Field deaths in plant agriculture. Journal of Agricultural and Environmental Ethics 31: 409-428."
+    ]
+  },
+  {
+    "id": "environment-01",
+    "category": "environment",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Well-managed grazing can build soil carbon, restore degraded grassland and use land that cannot grow crops. Comparing industrial feedlot beef with pasture-raised, rotationally grazed beef is misleading, and the headline footprint numbers average over very different systems. A vegan diet cannot replicate the ecological role that grazers play in some landscapes.",
+    "text": "Grass-fed beef from well-managed pasture can store carbon in the soil and look after the land. Isn't that more sustainable than monoculture crops?",
+    "key_points": [
+      "Acknowledge that grazing can sequester some soil carbon and that grassland management matters",
+      "Explain that soil sequestration is limited, saturates over time and is reversible, and generally does not offset the total emissions of grass-fed systems, which often need more land per unit of product",
+      "Include the opportunity cost of land: what the same land could store if it were restored to trees or native vegetation"
+    ],
+    "sources": [
+      "Garnett, T. et al. (2017). Grazed and Confused? Food Climate Research Network, University of Oxford.",
+      "Hayek, M. N., Harwatt, H., Ripple, W. J. & Mueller, N. D. (2021). The carbon opportunity cost of animal-sourced food production on land. Nature Sustainability 4: 21-24.",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "Our World in Data. Environmental impacts of food production (ourworldindata.org/environmental-impacts-of-food)."
+    ]
+  },
+  {
+    "id": "environment-02",
+    "category": "environment",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Soy expansion is a major driver of deforestation in parts of South America, and vegans rely on tofu, soy milk and soya-based meat substitutes. A diet that claims environmental virtue while depending on a crop linked to forest loss is at best inconsistent.",
+    "text": "Soy is wiping out the Amazon, and vegans eat loads of tofu and soy milk. Isn't that hypocritical?",
+    "key_points": [
+      "Acknowledge that soy expansion is linked to deforestation in parts of South America",
+      "Present the data on where soy goes: the majority of global soy is used for animal feed, and a smaller share is direct human food",
+      "Note that cattle ranching is a larger driver of deforestation overall, and that soy can be sourced from deforestation-free supply chains"
+    ],
+    "sources": [
+      "Our World in Data. Soy (ourworldindata.org/soy).",
+      "Our World in Data. Drivers of deforestation (ourworldindata.org/drivers-of-deforestation).",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "environment-03",
+    "category": "environment",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Food miles matter. A vegan diet built on avocados, almonds, quinoa and imported soya carries transport costs, while locally produced meat, dairy and seasonal food from nearby farms can have a smaller footprint. Telling people to cut animal foods while ignoring where their food comes from misses a large part of the picture.",
+    "text": "Vegans eat avocados and quinoa shipped in from around the world. Isn't local meat better for the planet than imported vegan food?",
+    "key_points": [
+      "Concede that transport is part of a food's footprint and that some foods, particularly air-freighted ones, are high-impact",
+      "Explain that transport is usually a small share of food's emissions compared with production, so what you eat usually matters more than where it comes from",
+      "Avoid claiming local food is never better, and note that local plant foods typically beat both"
+    ],
+    "sources": [
+      "Weber, C. L. & Matthews, H. S. (2008). Food-miles and the relative climate impacts of food choices in the United States. Environmental Science & Technology 42(10): 3508-3513.",
+      "Our World in Data. You want to reduce the carbon footprint of your food? Focus on what you eat, not whether your food is local (ourworldindata.org/food-choice-vs-eating-local).",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "environment-04",
+    "category": "environment",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "A large part of the world's agricultural land is grassland or rangeland that is too steep, dry or poor to grow crops. Ruminants turn it into food, and they also eat crop residues and by-products that people cannot. A world with no animal farming would waste that capacity and push more pressure onto the cropland we do have.",
+    "text": "A lot of farmland is too steep or dry to grow crops, but animals can graze it. Isn't that an efficient use of land that vegan farming can't touch?",
+    "key_points": [
+      "Acknowledge that much grazing land is unsuitable for crops and that animals can use by-products people cannot eat",
+      "Address that grazing land produces little food per hectare, and that it accounts for most of agricultural land use and could in part be restored or rewilded",
+      "Engage with the case for limited rather than zero animal agriculture instead of denying that it has any role"
+    ],
+    "sources": [
+      "Mottet, A. et al. (2017). Livestock: on our plates or eating at our table? A new analysis of the feed/food debate. Global Food Security 14: 1-8.",
+      "van Zanten, H. H. E. et al. (2016). Global food supply: land use efficiency of livestock systems. International Journal of Life Cycle Assessment 21: 747-758.",
+      "Our World in Data. Land use of diets (ourworldindata.org/land-use-diets).",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992."
+    ]
+  },
+  {
+    "id": "environment-05",
+    "category": "environment",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Almonds and avocados are water-intensive and often grown in drought-prone regions. Replacing dairy with plant milks can swap one environmental problem for another, and treating plant-based as automatically green ignores the water and land trade-offs of specific crops.",
+    "text": "Almond milk uses tons of water. Isn't swapping dairy for plant milks just trading one environmental problem for another?",
+    "key_points": [
+      "Acknowledge that almonds are water-intensive and are often grown in water-stressed regions",
+      "Compare plant milks on a like-for-like basis (emissions, land and water per litre), including oat and soy against dairy",
+      "Note that choosing plant-based does not mean choosing almond milk"
+    ],
+    "sources": [
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "Mekonnen, M. M. & Hoekstra, A. Y. (2012). A global assessment of the water footprint of farm animal products. Ecosystems 15: 401-415.",
+      "Our World in Data. Environmental impacts of food production (ourworldindata.org/environmental-impacts-of-food).",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "environment-06",
+    "category": "environment",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Methane from livestock is part of a biogenic cycle and breaks down in roughly a decade, unlike CO2 from fossil fuels, which accumulates for centuries. If herd sizes are stable, they are not adding new warming. Counting cattle emissions as if they were equivalent to coal using standard 100-year conversions mischaracterises their contribution to climate change.",
+    "text": "Cow methane breaks down within about a decade, unlike CO2 that lingers for centuries. If herds aren't growing, are they really causing extra warming?",
+    "key_points": [
+      "Acknowledge that methane is short-lived and that GWP-star is a legitimate way to describe the effect of stable methane emissions",
+      "Explain that stable emissions still sustain the current level of warming, that cutting them would cool, and that livestock also emit nitrous oxide and drive CO2 through land use",
+      "Note that global herd sizes and totals have grown in recent decades and that regional trends differ from the global picture"
+    ],
+    "sources": [
+      "Lynch, J., Cain, M., Pierrehumbert, R. & Allen, M. (2020). Demonstrating GWP*: a means of reporting warming-equivalent emissions that captures the contrasting impacts of short- and long-lived climate pollutants. Environmental Research Letters 15: 044023.",
+      "FAO (2013). Tackling climate change through livestock: a global assessment of emissions and mitigation opportunities.",
+      "Clark, M. A. et al. (2020). Global food system emissions could preclude achieving the 1.5 and 2 degrees C climate change targets. Science 370(6517): 705-708.",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992."
+    ]
+  },
+  {
+    "id": "environment-07",
+    "category": "environment",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "A relatively small number of large companies are responsible for most industrial emissions. Asking individuals to change their dinner shifts attention and blame from fossil-fuel and agribusiness giants onto consumers, and any single person's diet change makes no measurable difference to the climate. Policy and industry change is where the leverage is.",
+    "text": "A handful of huge companies produce most emissions. Isn't telling individuals to change what they eat just shifting the blame?",
+    "key_points": [
+      "Acknowledge that systemic, corporate and policy action matter a great deal",
+      "Explain that food systems are a large share of global emissions and that aggregate consumption choices shape demand and markets",
+      "Avoid claiming that personal diet change alone solves climate change"
+    ],
+    "sources": [
+      "Clark, M. A. et al. (2020). Global food system emissions could preclude achieving the 1.5 and 2 degrees C climate change targets. Science 370(6517): 705-708.",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "Heede, R. (2014). Tracing anthropogenic carbon dioxide and methane emissions to fossil fuel and cement producers, 1854-2010. Climatic Change 122: 229-241."
+    ]
+  },
+  {
+    "id": "environment-08",
+    "category": "environment",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Sustainable farms rotate crops with livestock. Manure supplies nutrients, animals eat residues and cover crops, and grazing fits into rotations that keep soil healthy. A fully vegan agriculture would have to depend more on synthetic fertiliser or on systems that are not proven at scale.",
+    "text": "Farms need animals for manure and crop rotation. Without livestock, don't we end up leaning more on synthetic fertiliser?",
+    "key_points": [
+      "Acknowledge that manure and mixed rotations are real agronomic benefits and that stockless systems face nutrient-cycling challenges",
+      "Explain the alternatives (legumes, green manures, composts, recycled nutrients from human waste), and note that much manure fertilises crops grown to feed animals in the first place",
+      "Avoid claiming that vegan-organic farming is proven at global scale"
+    ],
+    "sources": [
+      "Roos, E. et al. (2017). Greedy or needy? Land use and climate impacts of food in 2050 under different livestock futures. Global Environmental Change 47: 1-12.",
+      "Garnett, T. et al. (2017). Grazed and Confused? Food Climate Research Network, University of Oxford.",
+      "Mottet, A. et al. (2017). Livestock: on our plates or eating at our table? A new analysis of the feed/food debate. Global Food Security 14: 1-8."
+    ]
+  },
+  {
+    "id": "personal-01",
+    "category": "personal",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Food is a personal matter. Moral views on animals differ among thoughtful people, and everyone is entitled to decide what they eat without being told they are doing something wrong. Veganism is a legitimate lifestyle choice, but it is not a universal duty that others are obliged to share.",
+    "text": "What I eat is my personal choice. Why should it be anyone else's business?",
+    "key_points": [
+      "Distinguish purely personal choices from actions that affect others, which can be morally evaluated",
+      "Acknowledge the value of freedom of choice and that moral criticism is not coercion",
+      "Address whether 'it's my choice' can justify an act, since choice alone does not settle whether harm is justified"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-02",
+    "category": "personal",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Food is how families and communities hold together: Sunday roasts, festival dishes, regional cuisines. Asking people to drop animal foods asks them to give up a piece of their heritage, and a movement that brushes that aside is not taking people seriously.",
+    "text": "Meat is part of my family and cultural traditions: holidays, recipes, the lot. Why should I give that up?",
+    "key_points": [
+      "Acknowledge the real value of food traditions, family and community",
+      "Note that traditions change when harms are recognised, evolve over time, and that many traditional cuisines have plant-based dishes",
+      "Avoid dismissing culture as mere habit"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-03",
+    "category": "personal",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Many indigenous peoples depend on hunting, fishing and herding for nutrition, cultural continuity and self-determination, often in places where farming is not viable. A universal vegan ethic can look like a colonial imposition on communities that have long, sustainable relationships with the animals they live alongside, and that makes a blanket claim of moral wrongness hard to sustain.",
+    "text": "Plenty of indigenous communities rely on hunting and fishing and have done so sustainably for generations. Isn't telling them to go vegan a form of colonialism?",
+    "key_points": [
+      "Acknowledge communities with few alternatives and strong cultural, nutritional and sovereignty claims, and that most vegans do not target them",
+      "Distinguish subsistence hunting and fishing from the industrial food system most people use",
+      "Engage with the worry that a universal principle gets applied unevenly, without dodging the underlying principle about unnecessary harm"
+    ],
+    "sources": [
+      "Kuhnlein, H. V. & Receveur, O. (1996). Dietary change and traditional food systems of indigenous peoples. Annual Review of Nutrition 16: 417-442.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-04",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Vegan diets are often presented as cheap, but meat substitutes, specialist products, supplements and fresh produce can cost more, and many people on low incomes live far from affordable shops and have little time to cook from scratch. A moral demand that only comfortable people can meet is unfair, and it risks being a position for the privileged.",
+    "text": "Not everyone can afford the fancy vegan substitutes and fresh produce. Isn't veganism a privilege for people with money?",
+    "key_points": [
+      "Acknowledge that processed vegan substitutes and specialist products can be expensive and that access varies by area",
+      "Note that staples such as beans, lentils, rice, oats and seasonal vegetables are typically cheap, and compare like with like",
+      "Take time, access and skills barriers seriously instead of waving them away"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-05",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Whatever the merits of veganism, many people experience vegan advocacy as self-righteous. If the aim is to reduce animal suffering, an approach that makes people defensive is counterproductive, and encouraging people to eat less meat would probably do more good than all-or-nothing demands.",
+    "text": "Vegans come across as preachy and judgemental, and it puts people off. If you really wanted to help animals, wouldn't encouraging people to eat less meat work better?",
+    "key_points": [
+      "Acknowledge that tone and strategy criticisms have real support, including among advocates",
+      "Separate how some advocates behave from whether the underlying argument is sound",
+      "Address the strategic question of reduction versus all-or-nothing honestly"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-06",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Vegans use cars with rubber tyres, take medicines tested on animals, own phones built from mined materials and shop in supermarkets whose supply chains harm animals. If purity is impossible, the movement's emphasis on veganism as a clear moral line looks arbitrary, and the line could equally be drawn elsewhere.",
+    "text": "Vegans still use things that harm animals, like tested medicines, tyres and phone batteries. If you can't be perfect, why is your line the right one?",
+    "key_points": [
+      "Acknowledge that perfect avoidance is impossible",
+      "Explain the 'as far as is possible and practicable' framing and the difference between avoidable and unavoidable use",
+      "Avoid the all-or-nothing trap, since imperfection does not undermine the aim of reducing harm"
+    ],
+    "sources": [
+      "The Vegan Society. Definition of veganism (vegansociety.com).",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-07",
+    "category": "personal",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "Some people have food allergies, digestive conditions, histories of disordered eating, or a very narrow range of foods they can tolerate. For them, cutting out food groups can be difficult or unsafe. A moral position presented as universal has to account for the people for whom it is not realistically possible, and 'ought implies can' limits how far it extends.",
+    "text": "Some people have allergies, medical conditions or a history of eating disorders where cutting out food groups is risky. How can veganism be a moral duty if it isn't possible for everyone?",
+    "key_points": [
+      "Acknowledge genuine medical and practical limits, and that ought implies can",
+      "Explain that the principle is usually framed as avoiding exploitation where practicable, not as demanding harm to oneself",
+      "Avoid minimising eating-disorder risks, and avoid framing exceptions as excuses used by people who do not need them"
+    ],
+    "sources": [
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
+      "Bardone-Cone, A. M. et al. (2012). The inter-relationships between vegetarianism and eating disorders among females. Journal of the Academy of Nutrition and Dietetics 112(8): 1247-1252."
+    ]
+  },
+  {
+    "id": "personal-08",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Supermarkets order in bulk and one person's purchases never visibly change how many animals are bred or killed. If my diet makes no difference to what happens to any animal, the case for an obligation to change it is much weaker, and the effort looks like symbolic gesture.",
+    "text": "Even if I went vegan tomorrow, the same number of animals would be killed. My one choice makes no difference, so why bother?",
+    "key_points": [
+      "Address the expected-value argument: a purchase has a small chance of tipping a supply decision, with a large effect if it does",
+      "Acknowledge that causal impotence is a genuine philosophical puzzle and that market effects are diffuse and uncertain",
+      "Note complicity and integrity arguments that do not depend on measurable causal impact"
+    ],
+    "sources": [
+      "Kagan, S. (2011). Do I make a difference? Philosophy & Public Affairs 39(2): 105-141.",
+      "Norcross, A. (2004). Puppies, pigs, and people: eating meat and marginal cases. Philosophical Perspectives 18: 229-245.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  }
+]

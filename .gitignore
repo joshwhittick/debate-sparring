@@ -1,0 +1,6 @@
+.env
+logs/
+data/*
+!data/objections.json
+__pycache__/
+*.pyc
