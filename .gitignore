@@ -12,3 +12,6 @@ tests/fixtures/*.webm
 research/*/raw/
 research/*/pages/
 research/*/logs/
+
+# Streamlit secrets (API key)
+.streamlit/secrets.toml

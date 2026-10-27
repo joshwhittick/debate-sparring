@@ -1,14 +1,24 @@
 # Sparring Partner
 
-A local practice tool for answering common objections to veganism under time pressure. Each round has 5 objections. You answer each one by typing or speaking, the AI pushes back once, you reply, and Gemini scores both turns on accuracy, logic, addressing the crux, concision and concession discipline. You also get tips and a model answer.
+A practice tool for answering common objections to veganism under time pressure. Each round has 5 objections. You answer each one by typing or speaking, the AI pushes back once, you reply, and Gemini scores both turns on accuracy, logic, addressing the crux, concision and concession discipline. You also get tips and a model answer.
 
 **Debate practice, not medical or dietary advice.**
+
+Two front ends share one core (`core.py`) and one database:
+
+| Front end | Run | Notes |
+|---|---|---|
+| Local web app (FastAPI + vanilla JS) | `python app.py` -> http://127.0.0.1:8000 | Timers auto-submit after the grace period; records WebM in the browser |
+| Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. Optional password gate |
 
 ## Contents
 
 | Path | What it does |
 |---|---|
-| `app.py` | FastAPI routes, objection-bank loading and validation, startup checks |
+| `core.py` | Shared logic: bank loading and validation, round/answer flow, judging, calibration, summaries, history. Raises `CoreError(status, code)` |
+| `app.py` | FastAPI routes over `core`, startup checks (exits on a bad bank or rejected key) |
+| `streamlit_app.py` | Streamlit front end over `core`: Practice and History pages |
+| `.streamlit/secrets.toml.example` | Template for Streamlit Cloud secrets (`secrets.toml` itself is gitignored) |
 | `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
 | `store.py` / `config.py` | SQLite access; every tunable value (timers, round size, upload limit, prices) |
 | `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v2), `transcribe.md` |
@@ -26,9 +36,18 @@ A local practice tool for answering common objections to veganism under time pre
 pip install -r requirements.txt
 copy .env.example .env      # then add GEMINI_API_KEY
 python app.py               # http://127.0.0.1:8000
+streamlit run streamlit_app.py   # or the Streamlit version, http://localhost:8501
 ```
 
-At startup the app validates the objection bank, then checks the key with a one-token call. It exits with "API key rejected" if the key is refused.
+At startup either front end validates the objection bank, then checks the key with a one-token call. `app.py` exits with "API key rejected" if the key is refused; Streamlit shows the error on the page.
+
+### Streamlit Community Cloud
+
+1. Push this repo to GitHub (it has no remote yet).
+2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`.
+3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key and an `APP_PASSWORD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
+
+On Cloud the SQLite database, recordings and logs live on the container's disk and are lost when the app restarts or redeploys. History and calibration are only durable locally.
 
 | `.env` | Meaning |
 |---|---|
@@ -37,6 +56,7 @@ At startup the app validates the objection bank, then checks the key with a one-
 | `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled when this is `paid` |
 | `VOICE_ON_FREE_TIER` | `1` enables Speak mode on the free tier anyway. Your recordings may then be used and human-reviewed by Google |
 | `GEMINI_API_SURFACE` | Optional. Set to `generate_content` if `interactions.create` misbehaves |
+| `APP_PASSWORD` | Streamlit only. When set, the page asks for it first. Set it on any web deploy, since every visitor spends your Gemini credit |
 
 Timers, round size, the upload limit and prices are in `config.py`.
 
@@ -44,7 +64,7 @@ Timers, round size, the upload limit and prices are in `config.py`.
 
 - Typed answers and voice recordings are sent to the Gemini API.
 - **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `GEMINI_TIER=paid` (a billed project) or you opt in with `VOICE_ON_FREE_TIER=1`.
-- Recordings are kept under `data/audio/`. You can delete them per answer from the feedback screen; the transcripts and scores are kept.
+- Recordings are kept under `data/audio/` (`.webm` from the local app, `.wav` from Streamlit). You can delete them per answer from the feedback screen; the transcripts and scores are kept.
 - `logs/app.log` holds ids, timings, token counts and cost only. It never holds answer text or transcripts.
 
 ## Tests
@@ -52,6 +72,7 @@ Timers, round size, the upload limit and prices are in `config.py`.
 | Command | What it checks | Cost |
 |---|---|---|
 | `python tests/test_app.py` | Every route, with Gemini stubbed | Free |
+| `python tests/test_streamlit.py` | The Streamlit app via `AppTest`: round, skip, feedback, calibration, summary, history; Gemini stubbed | Free |
 | `python tests/e2e_stub.py` | A full browser round with Gemini stubbed (needs Playwright) | Free |
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
@@ -82,7 +103,9 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 ## Status
 
 - 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge). The default model changed to `gemini-3.1-flash-lite`, which passes the full self-test including `--audio` on a real recording (that run cost $0.017).
+- 2026-10-27: Streamlit front end added. Shared logic moved from `app.py` into `core.py`; the FastAPI routes and responses are unchanged (`test_app.py` and `e2e_stub.py` pass).
 - TODO:
+  - Deploy to Streamlit Cloud (needs a GitHub remote first).
   - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
   - Decide which of the 14 items from the gap analysis to add.
   - Rewrite the `tests/selftest.json` answers yourself.

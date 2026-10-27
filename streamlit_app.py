@@ -1,0 +1,378 @@
+"""Debate sparring app, Streamlit front end (local or Streamlit Community Cloud). Logic lives in `core`.
+
+Run: streamlit run streamlit_app.py
+On Streamlit Cloud, put GEMINI_API_KEY (and APP_PASSWORD) in the app's secrets.
+"""
+import hmac
+import os
+import time
+
+import streamlit as st
+
+# Copy root-level Streamlit secrets into the environment before config reads it (Cloud has no .env).
+try:
+    for _key, _value in st.secrets.items():
+        if isinstance(_value, (str, int, float, bool)):
+            os.environ.setdefault(_key, str(_value))
+except Exception:  # no secrets.toml: local run, .env applies
+    pass
+
+import config  # noqa: E402
+import core  # noqa: E402
+import judge  # noqa: E402
+import store  # noqa: E402
+
+st.set_page_config(page_title="Sparring Partner", page_icon="🌱")
+ss = st.session_state
+DISCLAIMER = "Debate practice, not medical or dietary advice."
+DIM_LABELS = {"accuracy": "Accuracy", "logic": "Logic", "crux": "Crux", "concision": "Concision",
+              "concession_discipline": "Concession discipline"}
+
+
+# --- startup ---
+
+@st.cache_resource
+def boot():
+    """Runs once per server process. Returns an error message, or None when ready."""
+    try:
+        core.init()
+    except core.BankInvalid:
+        return "Objection bank failed validation - see logs/app.log"
+    if not config.GEMINI_API_KEY:
+        return "GEMINI_API_KEY is not set - add it to .env (local) or the app's secrets (Cloud)"
+    try:
+        judge.ping()
+    except judge.KeyRejected:
+        return "API key rejected"
+    core.log.info("streamlit startup: model=%s tier=%s prompt_version=%s pending=%d", config.GEMINI_MODEL,
+                  config.GEMINI_TIER, judge.PROMPT_VERSION, store.count_pending())
+    return None
+
+
+def password_ok():
+    if not config.APP_PASSWORD or ss.get("authed"):
+        return True
+    pw = st.text_input("Password", type="password")
+    if pw and hmac.compare_digest(pw.encode(), config.APP_PASSWORD.encode()):
+        ss.authed = True
+        st.rerun()
+    if pw:
+        st.error("Wrong password")
+    return False
+
+
+def call(fn, *args, **kwargs):
+    """Runs a core call; shows the error and returns None on CoreError."""
+    try:
+        return fn(*args, **kwargs)
+    except core.CoreError as e:
+        if e.code == "followup_failed":
+            ss.answer_id, ss.phase = e.extra["answer_id"], "followup_failed"
+            st.rerun()
+        st.error(f"{e.code.replace('_', ' ').capitalize()}{' - ' + e.extra['detail'] if 'detail' in e.extra else ''}")
+        return None
+
+
+# --- round state ---
+
+def start_round(category, study, shuffle, calibration, reviewer):
+    out = call(core.new_round, category, study, shuffle)
+    if out:
+        ss.round = {"id": out["round_id"], "objections": out["objections"], "idx": 0, "study": study,
+                    "calibration": calibration, "reviewer": reviewer}
+        begin_objection()
+
+
+def begin_objection():
+    rnd = ss.round
+    if rnd["idx"] >= len(rnd["objections"]):
+        ss.phase = "summary"
+        return
+    ss.phase, ss.answer_id, ss.result, ss.turn_started = "opener", None, None, time.time()
+
+
+def next_objection():
+    ss.round["idx"] += 1
+    begin_objection()
+
+
+def end_round():
+    ss.phase = "summary"
+
+
+# --- widgets ---
+
+@st.fragment(run_every=1)
+def countdown(limit):
+    left = limit - (time.time() - ss.turn_started)
+    if left > 0:
+        st.progress(left / limit, text=f"{int(left)} s left")
+    elif left > -config.GRACE_S:
+        st.warning("Time's up - finish your sentence")
+    else:
+        st.error("Time's up - submit now")
+
+
+def turn_input(turn, key):
+    """Mode picker, optional timer and input. Returns (mode, text, audio_bytes, mime) once submitted, else None."""
+    modes = ["type", "speak"] if core.speak_enabled() else ["type"]
+    mode = st.radio("Answer by", modes, horizontal=True, key=f"mode_{key}", format_func=str.capitalize)
+    if not ss.round["study"]:
+        countdown(config.TIMERS["opener" if turn == "opener" else "followup"][mode])
+    if mode == "type":
+        text = st.text_area("Your answer", key=f"text_{key}", height=160)
+        if st.button("Submit", key=f"submit_{key}", type="primary", disabled=not text.strip()):
+            return mode, text, None, None
+        return None
+    audio = st.audio_input("Record your answer", key=f"audio_{key}")
+    if st.button("Submit", key=f"submit_{key}", type="primary", disabled=audio is None):
+        return mode, None, audio.getvalue(), audio.type or "audio/wav"
+    return None
+
+
+def show_flags(flags):
+    if not flags:
+        st.write("No flags raised.")
+        return
+    for turn in ("opener", "reply"):
+        mine = [f for f in flags if f.get("turn") == turn]
+        if mine:
+            st.markdown(f"**{turn.capitalize()}**")
+            for f in mine:
+                st.markdown(f"- `{f['type']}` {f.get('detail') or ''}")
+    other = [f for f in flags if f.get("turn") not in ("opener", "reply")]
+    for f in other:
+        st.markdown(f"- `{f['type']}` {f.get('detail') or ''}")
+
+
+def show_feedback(answer):
+    fb = answer["feedback"]
+    cols = st.columns(len(store.DIMENSIONS) + 1)
+    cols[0].metric("Overall", f"{fb['overall']}/5")
+    for col, d in zip(cols[1:], store.DIMENSIONS):
+        col.metric(DIM_LABELS[d], fb["scores"][d])
+    st.subheader("Flags")
+    show_flags(fb.get("flags"))
+    if fb.get("tips"):
+        st.subheader("Tips")
+        for tip in fb["tips"]:
+            st.markdown(f"- {tip}")
+    with st.expander("Model answer"):
+        st.write(fb.get("model_answer") or "")
+    notes = fb.get("notes") or {}
+    for label, key in (("Tone", "tone"), ("Persuasiveness", "persuasiveness"), ("Delivery", "delivery")):
+        if notes.get(key):
+            st.caption(f"**{label}:** {notes[key]}")
+    show_recordings(answer)
+    st.caption(DISCLAIMER)
+
+
+def show_recordings(answer):
+    if not (answer["has_opener_audio"] or answer["has_reply_audio"]):
+        return
+    with st.expander("Your recordings"):
+        for turn in ("opener", "reply"):
+            if answer[f"has_{turn}_audio"]:
+                try:
+                    path, mime = core.audio_file(answer["id"], turn)
+                except core.CoreError:
+                    continue
+                st.caption(turn.capitalize())
+                st.audio(path.read_bytes(), format=mime)
+        if st.button("Delete recordings", key=f"del_audio_{answer['id']}"):
+            call(core.delete_audio, answer["id"])
+            ss.result = core.judged_out(store.get_answer(answer["id"]))
+            st.rerun()
+
+
+# --- screens ---
+
+def start_screen():
+    st.write("Five objections per round. Answer each one, take one pushback, reply, then get scored feedback.")
+    st.caption(DISCLAIMER)
+    with st.form("start"):
+        category = st.selectbox("Category", [""] + config.CATEGORIES,
+                                format_func=lambda c: c.capitalize() if c else "All")
+        study = st.checkbox("Study mode (untimed)")
+        shuffle = st.checkbox("Shuffle (ignore how often each objection has come up)")
+        calibration = st.checkbox("Calibration mode (score yourself before seeing feedback)")
+        reviewer = st.selectbox("Reviewer", ["josh", "second"])
+        if st.form_submit_button("Start round", type="primary"):
+            start_round(category, study, shuffle, calibration, reviewer)
+            st.rerun()
+    if not core.speak_enabled():
+        st.caption("Speak mode is off: it needs GEMINI_TIER=paid, or VOICE_ON_FREE_TIER=1.")
+
+
+def objection_header():
+    rnd = ss.round
+    obj = rnd["objections"][rnd["idx"]]
+    st.caption(f"Objection {rnd['idx'] + 1} of {len(rnd['objections'])} · {obj['category'].capitalize()}"
+               f"{' · Study mode' if rnd['study'] else ''}")
+    st.markdown(f"### {obj['text']}")
+    return obj
+
+
+def opener_screen():
+    rnd = ss.round
+    obj = objection_header()
+    key = f"{rnd['id']}_{obj['id']}_opener"
+    submitted = turn_input("opener", key)
+    if submitted:
+        mode, text, data, mime = submitted
+        with st.spinner("Getting the pushback..."):
+            out = call(core.start_answer, rnd["id"], obj["id"], mode, text, data, mime or "audio/webm")
+        if out:
+            ss.answer_id, ss.phase, ss.turn_started = out["answer_id"], "reply", time.time()
+            st.rerun()
+    left, right = st.columns(2)
+    if left.button("Skip this objection"):
+        try:
+            new = core.skip(rnd["id"], obj["id"])
+        except core.CoreError as e:
+            st.error(e.code.replace("_", " ").capitalize())
+        else:
+            if new:
+                rnd["objections"][rnd["idx"]] = new
+            else:  # bank exhausted: the round shrinks
+                rnd["objections"].pop(rnd["idx"])
+            begin_objection()
+            st.rerun()
+    if right.button("End round"):
+        end_round()
+        st.rerun()
+
+
+def followup_failed_screen():
+    objection_header()
+    st.error("Couldn't get the pushback. Your opener is saved.")
+    if st.button("Retry", type="primary"):
+        if call(core.retry_followup, ss.answer_id):
+            ss.phase, ss.turn_started = "reply", time.time()
+            st.rerun()
+    if st.button("Skip to next objection"):
+        next_objection()
+        st.rerun()
+
+
+def reply_screen():
+    objection_header()
+    answer = core.get_answer(ss.answer_id)
+    with st.expander("Your opener", expanded=False):
+        st.write(answer["opener_text"] or "(nothing transcribed)")
+    st.info(f"**Pushback:** {answer['followup_text']}")
+    submitted = turn_input("reply", f"{ss.answer_id}_reply")
+    if submitted:
+        mode, text, data, mime = submitted
+        with st.spinner("Judging..."):
+            out = call(core.submit_reply, ss.answer_id, mode, text, data, mime or "audio/webm")
+        if out:
+            ss.result = out
+            ss.phase = "calibrate" if ss.round["calibration"] and out["status"] == "judged" else "feedback"
+            st.rerun()
+
+
+def calibrate_screen():
+    objection_header()
+    st.subheader("Your scores")
+    st.caption("Score the answer yourself before the AI's feedback is shown.")
+    with st.form(f"calibrate_{ss.answer_id}"):
+        scores = {d: st.slider(DIM_LABELS[d], 1, 5, 3) for d in store.DIMENSIONS}
+        seeded = st.checkbox("I seeded a deliberate error")
+        if st.form_submit_button("Save and show feedback", type="primary"):
+            call(core.calibrate, ss.answer_id, ss.round["reviewer"], scores, seeded)
+            ss.phase = "feedback"
+            st.rerun()
+
+
+def feedback_screen():
+    objection_header()
+    result = ss.result
+    if result["status"] != "judged":
+        st.error("Judging failed. Both turns are saved.")
+        if st.button("Try again", type="primary"):
+            with st.spinner("Judging..."):
+                out = call(core.rejudge, ss.answer_id)
+            if out:
+                ss.result = out
+                st.rerun()
+    else:
+        show_feedback(result["answer"])
+    last = ss.round["idx"] + 1 >= len(ss.round["objections"])
+    if st.button("Round summary" if last else "Next objection", type="primary"):
+        next_objection()
+        st.rerun()
+
+
+def summary_screen():
+    summary = call(core.round_summary, ss.round["id"])
+    if not summary:
+        return
+    st.subheader("Round summary")
+    cols = st.columns(len(store.DIMENSIONS))
+    for col, d in zip(cols, store.DIMENSIONS):
+        value = summary["dimension_means"][d]
+        col.metric(DIM_LABELS[d], "-" if value is None else value)
+    if summary["weakest_category"]:
+        st.write(f"Weakest category this round: **{summary['weakest_category'].capitalize()}**")
+    st.dataframe([{"Objection": o["text"], "Category": o["category"], "Overall": o["overall"],
+                   "Status": o["status"]} for o in summary["objections"]], hide_index=True, width="stretch")
+    if st.button("New round", type="primary"):
+        ss.pop("round", None)
+        ss.phase = None
+        st.rerun()
+
+
+def practice_page():
+    if not ss.get("round") or not ss.get("phase"):
+        start_screen()
+        return
+    {"opener": opener_screen, "followup_failed": followup_failed_screen, "reply": reply_screen,
+     "calibrate": calibrate_screen, "feedback": feedback_screen, "summary": summary_screen}[ss.phase]()
+
+
+def history_page():
+    h = core.history()
+    st.metric("Total spend", f"${h['spend_usd']:.4f}")
+    st.subheader("Rounds")
+    if h["rounds"]:
+        st.dataframe([{"Date": r["started_at"], "Category": (r["category_filter"] or "All").capitalize(),
+                       "Mode": "Study" if r["study_mode"] else "Timed", "Answered": r["answered"],
+                       "Mean": r["mean_overall"]} for r in h["rounds"]], hide_index=True, width="stretch")
+    else:
+        st.write("No rounds yet.")
+    st.subheader("Category trend (last 10 rounds)")
+    st.dataframe([{"Category": t["category"].capitalize(), "Mean overall": t["mean_overall"], "Answers": t["n"]}
+                  for t in h["category_trend"]], hide_index=True, width="stretch")
+    st.subheader(f"Calibration (prompt {h['prompt_version']})")
+    if h["calibration"]:
+        st.dataframe([{"Reviewer": c["reviewer"], "Answers": c["answers"], "Within ±1": f"{c['pct']}%",
+                       "Seeded flagged": f"{c['seeded_flagged']}/{c['seeded_total']}"} for c in h["calibration"]],
+                     hide_index=True, width="stretch")
+    else:
+        st.write("No calibration answers for this prompt version.")
+    if h["pending"]:
+        st.subheader("Not judged")
+        for p in h["pending"]:
+            left, right = st.columns([4, 1])
+            left.write(f"{p['objection_text']} ({p['status']})")
+            if right.button("Judge", key=f"rejudge_{p['answer_id']}"):
+                with st.spinner("Judging..."):
+                    call(core.rejudge, p["answer_id"])
+                st.rerun()
+
+
+def main():
+    st.title("Sparring Partner")
+    if not password_ok():
+        return
+    error = boot()
+    if error:
+        st.error(error)
+        return
+    page = st.sidebar.radio("Page", ["Practice", "History"], label_visibility="collapsed")
+    st.sidebar.caption(f"Model: {config.GEMINI_MODEL} · tier: {config.GEMINI_TIER}")
+    practice_page() if page == "Practice" else history_page()
+
+
+main()

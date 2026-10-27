@@ -21,6 +21,8 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite").strip()
 GEMINI_TIER = os.getenv("GEMINI_TIER", "free").strip().lower()
 # Opt-in: on the free tier Google may use and human-review recordings (see README).
 VOICE_ON_FREE_TIER = os.getenv("VOICE_ON_FREE_TIER", "").strip() == "1"
+# Streamlit only: when set, the app asks for this password first. Set it for any web deploy.
+APP_PASSWORD = os.getenv("APP_PASSWORD", "").strip()
 
 ROUND_SIZE = 5
 MAX_DIFFICULTY_3_PER_ROUND = 2
