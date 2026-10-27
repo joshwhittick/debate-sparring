@@ -15,3 +15,10 @@ research/*/logs/
 
 # Streamlit secrets (API key)
 .streamlit/secrets.toml
+
+# Any other env / key files
+.env.*
+!.env.example
+**/secrets.toml
+*.key
+*.pem
