@@ -234,7 +234,7 @@ function wireNav() {
 /** Returns a list of reasons Speak is unavailable (empty list means it is available). */
 function voiceBlockers() {
   const reasons = [];
-  if (!state.config || !state.config.speak_enabled) reasons.push('Voice needs the paid Gemini tier - see README');
+  if (!state.config || !state.config.speak_enabled) reasons.push('Voice is off on the free tier - set VOICE_ON_FREE_TIER=1 or GEMINI_TIER=paid in .env (see README)');
   let supported = false;
   try {
     supported =
@@ -288,9 +288,12 @@ function readAloud(parent, text) {
 
 /**
  * One answer turn: Type/Speak toggle, countdown + grace, recorder, submit.
- * opts: {v: view id, timerKey: 'opener'|'followup', gate: Promise|null, onSubmit(payload, turn)}
+ * opts: {v: view id, timerKey: 'opener'|'followup', gate: Promise|null, onSubmit(payload, turn),
+ *        onSkip?: () => Promise<true|string>}
  * payload: {mode:'type', text} or {mode:'speak', audio: Blob}
  * The submit guard is the `submitted` flag: the first path to call finish() wins.
+ * onSkip (opener turn only) shows a Skip button. It resolves true once the screen has moved on,
+ * or to an error message, in which case the turn is reopened. `skipping` blocks double clicks.
  */
 function createTurn(parent, opts) {
   const study = state.round.study;
@@ -301,6 +304,7 @@ function createTurn(parent, opts) {
 
   let mode = speakOk && storeGet(MODE_KEY) === 'speak' ? 'speak' : 'type';
   let submitted = false;
+  let skipping = false;
   let busy = false;
   let gateOpen = !opts.gate;
   let ticker = null;
@@ -322,12 +326,19 @@ function createTurn(parent, opts) {
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') finish();
   });
   const submitBtn = h('button', { type: 'button', class: 'primary', text: 'Submit', onclick: () => finish() });
-  const typeArea = h('div', { class: 'type-area stack' }, textarea, h('div', { class: 'row' }, submitBtn, h('span', { class: 'muted small', text: 'Ctrl+Enter also submits' })));
+  const skipBtns = []; // one per input area (type / speak); both share the same state
+  const makeSkipBtn = () => {
+    if (!opts.onSkip) return null;
+    const btn = h('button', { type: 'button', class: 'skip-btn', text: 'Skip', onclick: () => skip() });
+    skipBtns.push(btn);
+    return btn;
+  };
+  const typeArea = h('div', { class: 'type-area stack' }, textarea, h('div', { class: 'row' }, submitBtn, makeSkipBtn(), h('span', { class: 'muted small', text: 'Ctrl+Enter also submits' })));
 
   const startBtn = h('button', { type: 'button', class: 'primary', text: 'Start recording', onclick: () => startRecording() });
   const stopBtn = h('button', { type: 'button', class: 'primary', text: 'Stop and submit', onclick: () => finish() });
   const recInfo = h('div', { class: 'rec-info' }, h('span', { class: 'rec-dot' }), h('span', { text: 'Recording...' }));
-  const speakArea = h('div', { class: 'speak-area row' }, startBtn, recInfo, stopBtn);
+  const speakArea = h('div', { class: 'speak-area row' }, startBtn, recInfo, stopBtn, makeSkipBtn());
 
   const statusEl = h('p', { class: 'status', role: 'status', 'aria-live': 'polite' });
   const busyText = h('span', { text: '' });
@@ -347,7 +358,13 @@ function createTurn(parent, opts) {
     if (!speakOk) speakBtn.title = blockers.join('. ');
     typeArea.hidden = mode !== 'type';
     speakArea.hidden = mode !== 'speak';
-    const inputsLocked = !gateOpen || submitted;
+    const inputsLocked = !gateOpen || submitted || skipping;
+    for (const btn of skipBtns) {
+      btn.hidden = submitted; // gone once the opener is in (also covers the time's-up auto-submit)
+      btn.disabled = skipping || submitted;
+    }
+    typeBtn.disabled = typeBtn.disabled || skipping;
+    speakBtn.disabled = speakBtn.disabled || skipping;
     textarea.disabled = inputsLocked;
     submitBtn.disabled = inputsLocked;
     startBtn.hidden = recording();
@@ -438,7 +455,7 @@ function createTurn(parent, opts) {
   }
 
   async function startRecording() {
-    if (submitted || recorder || !gateOpen) return;
+    if (submitted || skipping || recorder || !gateOpen) return;
     startBtn.disabled = true;
     say('Waiting for microphone permission...', 'info');
     try {
@@ -453,7 +470,7 @@ function createTurn(parent, opts) {
       startTypeClock();
       return;
     }
-    if (!alive(opts.v) || submitted) {
+    if (!alive(opts.v) || submitted || skipping) {
       releaseStream();
       return;
     }
@@ -488,8 +505,34 @@ function createTurn(parent, opts) {
 
   /* --- submit --- */
 
+  /** Opener only: swap this objection. Cancels clock, read-aloud and any recording (discarded, never posted). */
+  async function skip() {
+    if (!opts.onSkip || submitted || skipping) return; // guard flag against double clicks
+    skipping = true;
+    stopClock();
+    try { window.speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+    if (recorder) {
+      recorder.onstop = null; // discard: never deliver this audio
+      try { recorder.stop(); } catch (e) { /* already stopped */ }
+      recorder = null;
+    }
+    chunks = [];
+    releaseStream();
+    say('Finding another objection...', 'info');
+    render();
+    let outcome;
+    try {
+      outcome = await opts.onSkip();
+    } catch (e) {
+      outcome = "Couldn't skip this objection. Try again.";
+    }
+    if (!alive(opts.v) || outcome === true) return;
+    skipping = false;
+    turn.reopen(outcome);
+  }
+
   function finish() {
-    if (submitted) return; // guard flag: timer, button and shortcut can all race here
+    if (submitted || skipping) return; // guard flag: timer, button and shortcut can all race here
     if (mode === 'speak' && !recording()) return;
     submitted = true;
     stopClock();
@@ -548,6 +591,7 @@ function createTurn(parent, opts) {
     opts.gate.then(() => {
       if (!alive(opts.v)) return;
       gateOpen = true;
+      if (skipping) return; // read-aloud was cancelled by Skip: do not start a clock
       showIdleClock();
       render();
       startTypeClock();
@@ -595,6 +639,7 @@ function showStart() {
     (cfg.categories || []).map((c) => h('option', { value: c, text: capitalise(c) }))
   );
   const study = h('input', { type: 'checkbox', id: 'study' });
+  const shuffle = h('input', { type: 'checkbox', id: 'shuffle' });
   const read = h('input', { type: 'checkbox', id: 'read' });
   const calib = h('input', { type: 'checkbox', id: 'calib' });
   const reviewer = h('select', { id: 'reviewer', 'aria-label': 'Reviewer' }, h('option', { value: 'josh', text: 'Josh' }), h('option', { value: 'second', text: 'Second reviewer' }));
@@ -606,6 +651,7 @@ function showStart() {
     { class: 'options' },
     h('div', { class: 'field' }, h('label', { for: 'category', text: 'Category' }), category),
     h('label', { class: 'check' }, study, h('span', {}, 'Study mode (untimed)', h('span', { class: 'hint', text: 'No countdown. Take as long as you need.' }))),
+    h('label', { class: 'check' }, shuffle, h('span', {}, 'Shuffle', h('span', { class: 'hint', text: 'Random order instead of least-practised first.' }))),
     h('label', { class: 'check' }, read, h('span', {}, 'Read objections aloud', h('span', { class: 'hint', text: 'Uses your browser voice. The clock starts when reading ends.' }))),
     h(
       'div',
@@ -620,7 +666,7 @@ function showStart() {
   startBtn.addEventListener('click', () => {
     startBtn.disabled = true;
     startRound(
-      { category: category.value || null, study: study.checked, readAloud: read.checked, calibration: calib.checked, reviewer: reviewer.value },
+      { category: category.value || null, study: study.checked, shuffle: shuffle.checked, readAloud: read.checked, calibration: calib.checked, reviewer: reviewer.value },
       startBtn,
       message
     );
@@ -632,7 +678,7 @@ function showStart() {
 async function startRound(opts, btn, message) {
   const view = state.view;
   message.textContent = '';
-  const res = await api('/rounds', { method: 'POST', json: { category: opts.category, study_mode: opts.study } });
+  const res = await api('/rounds', { method: 'POST', json: { category: opts.category, study_mode: opts.study, shuffle: !!opts.shuffle } });
   if (!alive(view)) return;
   const data = res.data;
   if (!res.ok || !data || !Array.isArray(data.objections) || data.objections.length === 0) {
@@ -677,7 +723,36 @@ function showObjection() {
     timerKey: 'opener',
     gate,
     onSubmit: (payload, turn) => submitOpener(v, objection, payload, turn),
+    onSkip: () => skipObjection(v, objection),
   });
+}
+
+/**
+ * Swap an unanswered objection via POST /rounds/{id}/skip. Resolves true when the screen has moved on
+ * (new objection, next objection, or summary), or to an error message so the turn can reopen.
+ */
+async function skipObjection(v, objection) {
+  const round = state.round;
+  const res = await api(`/rounds/${encodeURIComponent(round.id)}/skip`, { method: 'POST', json: { objection_id: objection.id } });
+  if (!alive(v) || state.round !== round) return true; // user left the screen meanwhile
+  const data = res.data || {};
+  if (!res.ok) {
+    if (res.status === 409 && data.error === 'already_answered') {
+      showSkipLink();
+      return 'That objection was already answered, so it cannot be skipped. Use Next to move on.';
+    }
+    return errorText(res, "Couldn't skip this objection. Try again.");
+  }
+  if (data.objection) {
+    round.objections[round.idx] = data.objection;
+    showObjection();
+    return true;
+  }
+  // Bank exhausted: the server just removed it, so the round is one shorter.
+  round.objections.splice(round.idx, 1);
+  if (round.idx >= round.objections.length) showSummary();
+  else showObjection();
+  return true;
 }
 
 async function submitOpener(v, objection, payload, turn) {

@@ -19,6 +19,8 @@ OBJECTIONS_PATH = DATA_DIR / "objections.json"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
 GEMINI_TIER = os.getenv("GEMINI_TIER", "free").strip().lower()
+# Opt-in: on the free tier Google may use and human-review recordings (see README).
+VOICE_ON_FREE_TIER = os.getenv("VOICE_ON_FREE_TIER", "").strip() == "1"
 
 ROUND_SIZE = 5
 MAX_DIFFICULTY_3_PER_ROUND = 2
@@ -42,6 +44,8 @@ MODEL_ANSWER_MAX_WORDS = 120
 PRICES = {
     "gemini-3.8-flash": {"input": 0.75, "output": 3.75},
     "gemini-3.5-flash-lite": {"input": 0.30, "output": 2.50},
+    "gemini-3.1-flash-lite": {"input": 0.25, "output": 1.50},
+    "gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
 }
 
 STREAM_CLIP_URL = "https://www.youtube.com/watch?v=kkw6ozdxli0&t=11700s"

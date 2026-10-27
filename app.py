@@ -113,18 +113,20 @@ def err(status, code, **extra):
 
 
 def speak_enabled():
-    return config.GEMINI_TIER == "paid"
+    return config.GEMINI_TIER == "paid" or config.VOICE_ON_FREE_TIER
 
 
 # --- helpers ---
 
-def pick_objections(category, n=config.ROUND_SIZE):
-    """Least-answered first, random within ties, at most MAX_DIFFICULTY_3_PER_ROUND hard items."""
-    counts = store.times_answered()
-    pool = [o for o in BANK.values() if not category or o["category"] == category]
+def pick_objections(category, n=config.ROUND_SIZE, shuffle=False, exclude=(), hard=0):
+    """Least-answered first, random within ties (shuffle: fully random), at most
+    MAX_DIFFICULTY_3_PER_ROUND hard items counting the `hard` already in the round."""
+    pool = [o for o in BANK.values() if (not category or o["category"] == category) and o["id"] not in exclude]
     random.shuffle(pool)
-    pool.sort(key=lambda o: counts.get(o["id"], 0))
-    picked, hard = [], 0
+    if not shuffle:
+        counts = store.times_answered()
+        pool.sort(key=lambda o: counts.get(o["id"], 0))
+    picked = []
     for o in pool:
         if o["difficulty"] == 3:
             if hard >= config.MAX_DIFFICULTY_3_PER_ROUND:
@@ -286,6 +288,11 @@ def get_config():
 class RoundIn(BaseModel):
     category: str | None = None
     study_mode: bool = False
+    shuffle: bool = False
+
+
+def objection_out(o):
+    return {"id": o["id"], "text": o["text"], "category": o["category"], "difficulty": o["difficulty"]}
 
 
 @app.post("/rounds")
@@ -293,12 +300,34 @@ def create_round(body: RoundIn):
     category = body.category or None
     if category and category not in config.CATEGORIES:
         return err(400, "bad_category")
-    picked = pick_objections(category)
-    round_id = store.create_round(category, body.study_mode, [o["id"] for o in picked])
-    log.info("round created round_id=%d n=%d", round_id, len(picked))
-    return {"round_id": round_id,
-            "objections": [{"id": o["id"], "text": o["text"], "category": o["category"],
-                            "difficulty": o["difficulty"]} for o in picked]}
+    picked = pick_objections(category, shuffle=body.shuffle)
+    round_id = store.create_round(category, body.study_mode, [o["id"] for o in picked], body.shuffle)
+    log.info("round created round_id=%d n=%d shuffle=%s", round_id, len(picked), body.shuffle)
+    return {"round_id": round_id, "objections": [objection_out(o) for o in picked]}
+
+
+class SkipIn(BaseModel):
+    objection_id: str
+
+
+@app.post("/rounds/{round_id}/skip")
+def skip_objection(round_id: int, body: SkipIn):
+    """Swaps an unanswered objection for a fresh one; objection is null when the bank is exhausted."""
+    rnd = store.get_round(round_id)
+    if not rnd or body.objection_id not in rnd["objection_ids"]:
+        return err(404, "not_found")
+    if any(a["objection_id"] == body.objection_id for a in store.round_answers(round_id)):
+        return err(409, "already_answered")
+    ids, skipped = rnd["objection_ids"], rnd["skipped_ids"] + [body.objection_id]
+    remaining = [i for i in ids if i != body.objection_id]
+    hard = sum(BANK[i]["difficulty"] == 3 for i in remaining)
+    picked = pick_objections(rnd["category_filter"], n=1, shuffle=bool(rnd["shuffle"]), exclude=set(ids) | set(skipped),
+                             hard=hard)
+    new = picked[0] if picked else None
+    ids = [new["id"] if (i == body.objection_id and new) else i for i in ids if i != body.objection_id or new]
+    store.set_round_objections(round_id, ids, skipped)
+    log.info("objection skipped round_id=%d replaced=%s", round_id, bool(new))
+    return {"objection": objection_out(new) if new else None}
 
 
 @app.post("/answers")

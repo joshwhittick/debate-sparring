@@ -17,8 +17,9 @@ At startup the app validates the objection bank, then checks the key with a one-
 | `.env` | Meaning |
 |---|---|
 | `GEMINI_API_KEY` | Required |
-| `GEMINI_MODEL` | Default `gemini-3.8-flash`. Try `gemini-3.5-flash-lite` |
-| `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled only when this is `paid` |
+| `GEMINI_MODEL` | Code default `gemini-3.8-flash`. `gemini-3.5-flash-lite` passed the self-test and is fastest (recommended). `gemini-2.5-flash-lite` is closed to new users |
+| `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled when this is `paid` |
+| `VOICE_ON_FREE_TIER` | `1` enables Speak mode on the free tier anyway. Your recordings may then be used and human-reviewed by Google |
 | `GEMINI_API_SURFACE` | Optional. Set to `generate_content` if `interactions.create` misbehaves |
 
 Timers, round size, the upload limit and prices are in `config.py`.
@@ -26,7 +27,7 @@ Timers, round size, the upload limit and prices are in `config.py`.
 ## Data and privacy
 
 - Typed answers and voice recordings are sent to the Gemini API.
-- **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `GEMINI_TIER=paid` and the key belongs to a billed project.
+- **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `GEMINI_TIER=paid` (a billed project) or you opt in with `VOICE_ON_FREE_TIER=1`.
 - Recordings are kept under `data/audio/`. You can delete them per answer from the feedback screen; the transcripts and scores are kept.
 - `logs/app.log` holds ids, timings, token counts and cost only. It never holds answer text or transcripts.
 

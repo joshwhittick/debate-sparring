@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS rounds (
     started_at TEXT NOT NULL,
     category_filter TEXT,
     study_mode INTEGER NOT NULL DEFAULT 0,
-    objection_ids TEXT NOT NULL DEFAULT '[]'
+    objection_ids TEXT NOT NULL DEFAULT '[]',
+    shuffle INTEGER NOT NULL DEFAULT 0,
+    skipped_ids TEXT NOT NULL DEFAULT '[]'
 );
 CREATE TABLE IF NOT EXISTS answers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,6 +69,12 @@ def init_db():
     config.DATA_DIR.mkdir(parents=True, exist_ok=True)
     with get_conn() as conn:
         conn.executescript(SCHEMA)
+        # Columns added after the first release; ALTER keeps existing databases working.
+        cols = {r["name"] for r in conn.execute("PRAGMA table_info(rounds)")}
+        if "shuffle" not in cols:
+            conn.execute("ALTER TABLE rounds ADD COLUMN shuffle INTEGER NOT NULL DEFAULT 0")
+        if "skipped_ids" not in cols:
+            conn.execute("ALTER TABLE rounds ADD COLUMN skipped_ids TEXT NOT NULL DEFAULT '[]'")
 
 
 def query(sql, params=()):
@@ -94,10 +102,10 @@ def execute(sql, params=()):
 
 # --- rounds ---
 
-def create_round(category_filter, study_mode, objection_ids):
+def create_round(category_filter, study_mode, objection_ids, shuffle=False):
     return execute(
-        "INSERT INTO rounds (started_at, category_filter, study_mode, objection_ids) VALUES (?, ?, ?, ?)",
-        (now_iso(), category_filter, int(bool(study_mode)), json.dumps(objection_ids)),
+        "INSERT INTO rounds (started_at, category_filter, study_mode, objection_ids, shuffle) VALUES (?, ?, ?, ?, ?)",
+        (now_iso(), category_filter, int(bool(study_mode)), json.dumps(objection_ids), int(bool(shuffle))),
     )
 
 
@@ -105,7 +113,13 @@ def get_round(round_id):
     row = query_one("SELECT * FROM rounds WHERE id = ?", (round_id,))
     if row:
         row["objection_ids"] = json.loads(row["objection_ids"])
+        row["skipped_ids"] = json.loads(row["skipped_ids"])
     return row
+
+
+def set_round_objections(round_id, objection_ids, skipped_ids):
+    execute("UPDATE rounds SET objection_ids = ?, skipped_ids = ? WHERE id = ?",
+            (json.dumps(objection_ids), json.dumps(skipped_ids), round_id))
 
 
 def times_answered():

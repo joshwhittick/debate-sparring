@@ -19,6 +19,7 @@ config.DB_PATH = TMP / "test.db"
 config.LOG_DIR = TMP / "logs"
 config.GEMINI_API_KEY = "test-key"
 config.GEMINI_TIER = "paid"
+config.VOICE_ON_FREE_TIER = False
 
 import judge  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -143,6 +144,27 @@ def main():
         check("spend recorded", hist["spend_usd"] > 0)
         check("rejudge clears calibration", True if client.post(f"/answers/{aid}/rejudge").status_code == 200
               and client.get("/history").json()["calibration"] == [] else False)
+
+        # Shuffle and skip on a fresh round.
+        r2 = client.post("/rounds", json={"category": "health", "shuffle": True}).json()
+        check("shuffle round has 5", len(r2["objections"]) == config.ROUND_SIZE)
+        ids2 = [o["id"] for o in r2["objections"]]
+        sk = client.post(f"/rounds/{r2['round_id']}/skip", json={"objection_id": ids2[0]}).json()
+        new_id = sk["objection"]["id"]
+        check("skip gives a fresh health objection", new_id not in ids2 and new_id.startswith("health"))
+        summ2 = client.get(f"/rounds/{r2['round_id']}/summary").json()
+        check("summary reflects the swap", [o["objection_id"] for o in summ2["objections"]] == [new_id] + ids2[1:])
+        check("skipped id can't be answered", play_answer(client, r2["round_id"], ids2[0]).status_code == 404)
+        play_answer(client, r2["round_id"], ids2[1])
+        check("answered objection can't be skipped",
+              client.post(f"/rounds/{r2['round_id']}/skip", json={"objection_id": ids2[1]}).status_code == 409)
+        # 8 health items: 5 in round + 1 skipped already; skip until the bank runs dry.
+        last = None
+        for _ in range(4):
+            cur = client.get(f"/rounds/{r2['round_id']}/summary").json()["objections"]
+            target = next(o["objection_id"] for o in cur if o["status"] == "unanswered")
+            last = client.post(f"/rounds/{r2['round_id']}/skip", json={"objection_id": target}).json()
+        check("exhausted bank shrinks round", last["objection"] is None)
 
         config.GEMINI_TIER = "free"
         check("speak blocked on free tier",

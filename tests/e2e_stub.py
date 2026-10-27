@@ -65,11 +65,23 @@ def main():
         page.on("console", lambda m: m.type == "error" and errors.append(f"console: {m.text}"))
         page.goto(BASE + "/#start")
         page.check("#study")
+        page.check("#shuffle")
         page.get_by_role("button", name="Start round").click()
+        # Skip once on the first objection: the text must change and the round stays the same length.
+        first = page.locator(".objection-text").inner_text()
+        page.get_by_role("button", name="Skip", exact=True).click()
+        page.wait_for_function(
+            "t => document.querySelector('.objection-text') && document.querySelector('.objection-text').textContent !== t",
+            arg=first,
+        )
+        results.append(("skip changed the objection", page.locator(".objection-text").inner_text() != first))
+        results.append(("progress is 1 of round size", f"Objection 1 of {config.ROUND_SIZE}" in page.inner_text("body")))
         for i in range(config.ROUND_SIZE):
             page.get_by_label("Your answer").fill(f"Opener {i}")
             page.get_by_role("button", name="Submit").click()
             page.get_by_text("Stub comeback").wait_for()
+            if i == 0:
+                results.append(("skip hidden after opener", page.get_by_role("button", name="Skip", exact=True).count() == 0))
             page.get_by_label("Your answer").fill(f"Reply {i}")
             page.get_by_role("button", name="Submit").click()
             page.get_by_text("Lead with the crux.").wait_for()
