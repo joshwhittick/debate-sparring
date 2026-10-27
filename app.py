@@ -200,7 +200,9 @@ def run_judge(answer_id):
     started = time.perf_counter()
     try:
         feedback, usage = judge.judge_answer(obj, row["opener_text"] or "", row["followup_text"] or "",
-                                             row["reply_text"] or "", delivery=delivery)
+                                             row["reply_text"] or "", delivery=delivery,
+                                             spoken={turn: row[f"{turn}_mode"] == "speak"
+                                                     for turn in ("opener", "reply")})
     except judge.JudgeError as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("judge failed answer_id=%d: %s", answer_id, type(e).__name__)
@@ -253,7 +255,10 @@ def transcribe_turn(answer_id, turn, data):
     path.write_bytes(data)
     store.update_answer(answer_id, **{f"{turn}_audio_path": path.name})
     try:
-        result, usage = judge.transcribe(data, "audio/webm")
+        row = store.get_answer(answer_id)
+        followup = row["followup_text"] if turn == "reply" else None
+        result, usage = judge.transcribe(data, "audio/webm", objection=BANK[row["objection_id"]],
+                                         followup_text=followup)
     except judge.JudgeError as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("transcribe failed answer_id=%d turn=%s: %s", answer_id, turn, type(e).__name__)

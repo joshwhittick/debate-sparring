@@ -34,7 +34,7 @@ FEEDBACK = {
 }
 judge.ping = lambda model=None: None
 judge.make_followup = lambda o, t, model=None: ("Stub comeback: what about the strongest form?", dict(USAGE))
-judge.judge_answer = lambda o, a, f, r, delivery=None, model=None: (json.loads(json.dumps(FEEDBACK)), dict(USAGE))
+judge.judge_answer = lambda o, a, f, r, delivery=None, spoken=None, model=None: (json.loads(json.dumps(FEEDBACK)), dict(USAGE))
 
 import uvicorn  # noqa: E402
 from playwright.sync_api import sync_playwright  # noqa: E402

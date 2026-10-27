@@ -36,7 +36,8 @@ FEEDBACK = {
 STATE = {"judge_fails": False}
 
 
-def fake_judge(objection, opener, followup, reply, delivery=None, model=None):
+def fake_judge(objection, opener, followup, reply, delivery=None, spoken=None, model=None):
+    STATE["last_spoken"] = spoken
     if STATE["judge_fails"]:
         raise judge.JudgeError("stub failure")
     return json.loads(json.dumps(FEEDBACK)), dict(USAGE)
@@ -45,7 +46,12 @@ def fake_judge(objection, opener, followup, reply, delivery=None, model=None):
 judge.ping = lambda model=None: None
 judge.make_followup = lambda objection, opener, model=None: ("But what about X?", dict(USAGE))
 judge.judge_answer = fake_judge
-judge.transcribe = lambda data, mime, model=None: ({"transcript": "spoken words", "delivery": "steady"}, dict(USAGE))
+def fake_transcribe(data, mime, objection=None, followup_text=None, model=None):
+    STATE["transcribe_ctx"] = (objection or {}).get("id"), followup_text
+    return {"transcript": "spoken words", "delivery": "steady"}, dict(USAGE)
+
+
+judge.transcribe = fake_transcribe
 
 import app as app_module  # noqa: E402
 
@@ -100,6 +106,8 @@ def main():
         files = {"audio": ("b.webm", b"reply-audio", "audio/webm")}
         sr = client.post(f"/answers/{sid}/reply", data={"mode": "speak"}, files=files).json()
         check("speak reply judged", sr["status"] == "judged" and sr["answer"]["has_reply_audio"])
+        check("transcriber gets objection and pushback", STATE["transcribe_ctx"] == (objs[1]["id"], "But what about X?"))
+        check("judge told both turns spoken", STATE["last_spoken"] == {"opener": True, "reply": True})
         check("audio streams", client.get(f"/audio/{sid}/opener").status_code == 200)
         check("speak without file 400",
               client.post("/answers", data={"round_id": rid, "objection_id": objs[2]["id"],

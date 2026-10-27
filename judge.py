@@ -5,8 +5,9 @@ Public API (functional; the only classes are the two exceptions):
     get_client(), ping(model=None)
     make_followup(objection, opener_text, model=None)            -> (str, usage)
     judge_answer(objection, opener_text, followup_text, reply_text,
-                 delivery=None, model=None)                       -> (feedback, usage)
-    transcribe(audio_bytes, mime, model=None)                     -> ({"transcript", "delivery"}, usage)
+                 delivery=None, spoken=None, model=None)          -> (feedback, usage)
+    transcribe(audio_bytes, mime, objection=None, followup_text=None,
+               model=None)                                        -> ({"transcript", "delivery"}, usage)
     combine_usage(*usages)                                        -> usage
 
 usage = {"model", "input_tokens", "output_tokens" (candidates + thinking), "cost_usd"}.
@@ -468,6 +469,14 @@ def _empty_note(opener_empty: bool, reply_empty: bool) -> str:
     return "The " + " and the ".join(empty) + " was empty (the person gave no answer for that turn)."
 
 
+def _spoken_note(spoken: dict | None) -> str:
+    turns = [turn for turn in TURNS if (spoken or {}).get(turn)]
+    if not turns:
+        return "none"
+    return ("The " + " and the ".join(turns) + " was spoken and machine-transcribed "
+            "(see hard rule 8).")
+
+
 # ---------------------------------------------------------------------------
 # make_followup
 # ---------------------------------------------------------------------------
@@ -682,8 +691,12 @@ def _empty_feedback(objection: dict, opener_empty: bool = True, reply_empty: boo
 
 
 def judge_answer(objection: dict, opener_text: str, followup_text: str, reply_text: str,
-                 delivery: dict | None = None, model: str | None = None) -> tuple[dict, dict]:
+                 delivery: dict | None = None, spoken: dict | None = None,
+                 model: str | None = None) -> tuple[dict, dict]:
     """Score both turns against the rubric. Returns (feedback, usage).
+
+    spoken = {"opener": bool, "reply": bool} marks machine-transcribed turns, so the judge
+    scores the intended meaning rather than mis-heard words.
 
     delivery = {"opener": str|None, "reply": str|None} (from transcribe) is copied into
     notes.delivery by code (not by the model), so it stays faithful and cannot carry injected text."""
@@ -700,6 +713,8 @@ def judge_answer(objection: dict, opener_text: str, followup_text: str, reply_te
         "followup": _escape(followup_text or ""),
         "reply": _escape(reply_text or ""),
         "empty_note": _empty_note(opener_empty, reply_empty),
+        "spoken": _spoken_note(spoken),
+        "delivery": _escape(_delivery_text(delivery)) or "none",
     })
     system = _fill(system_tpl, {"max_words": limit})
     parts = [("text", _fill(input_tpl, values))]
@@ -731,15 +746,28 @@ def _validate_transcript(text: str):
     return {"transcript": transcript, "delivery": delivery if transcript else None}, None
 
 
-def transcribe(audio_bytes: bytes, mime: str, model: str | None = None) -> tuple[dict, dict]:
+def _transcribe_context(objection: dict | None, followup_text: str | None) -> str:
+    if not objection:
+        return "none"
+    lines = [f"Topic: a debate about veganism ({objection.get('category', '')}).",
+             f"Objection the speaker is answering: {objection.get('text', '')}"]
+    if followup_text:
+        lines.append(f"Pushback the speaker is replying to: {followup_text}")
+    return _escape("\n".join(lines))
+
+
+def transcribe(audio_bytes: bytes, mime: str, objection: dict | None = None,
+               followup_text: str | None = None, model: str | None = None) -> tuple[dict, dict]:
     """Transcribe inline audio. Returns ({"transcript": str, "delivery": str|None}, usage).
-    An empty transcript means silence or unintelligible audio."""
+    An empty transcript means silence or unintelligible audio. objection (and followup_text
+    for a reply turn) are passed as context so debate vocabulary is heard correctly."""
     model = model or config.GEMINI_MODEL
     if not audio_bytes:
         raise JudgeError("transcribe: no audio data")
     mime = (mime or "audio/webm").split(";")[0].strip().lower()
     system, input_tpl = _read_prompt("transcribe.md")
-    parts = [("text", _fill(input_tpl, {})), ("audio", audio_bytes, mime)]
+    context = _transcribe_context(objection, followup_text)
+    parts = [("text", _fill(input_tpl, {"context": context})), ("audio", audio_bytes, mime)]
     return _run("transcribe", model, system, parts, TRANSCRIBE_SCHEMA, _validate_transcript)
 
 
