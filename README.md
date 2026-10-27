@@ -4,6 +4,22 @@ A local practice tool for answering common objections to veganism under time pre
 
 **Debate practice, not medical or dietary advice.**
 
+## Contents
+
+| Path | What it does |
+|---|---|
+| `app.py` | FastAPI routes, objection-bank loading and validation, startup checks |
+| `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
+| `store.py` / `config.py` | SQLite access; every tunable value (timers, round size, upload limit, prices) |
+| `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v2), `transcribe.md` |
+| `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
+| `data/objections.json` | Objection bank: 40 items, all `reviewed: false`. The only tracked file in `data/` |
+| `data/` (gitignored) | `sparring.db`, `audio/`, plus the review reports `bank_review_2026-10-27.md` and `site_gap_analysis_2026-10-27.md` |
+| `tests/` | `test_app.py`, `e2e_stub.py`, `selftest.json`; `fixtures/` holds a gitignored recording |
+| `research/carnismdebunked/` | Scraper and local copy of carnismdebunked.com (see Research material) |
+| `debate-sparring-mvp-prd.md` | The PRD the app was built from |
+| `TIDY_2026-10-27.md` | Tidy log |
+
 ## Setup
 
 ```
@@ -38,7 +54,7 @@ Timers, round size, the upload limit and prices are in `config.py`.
 | `python tests/test_app.py` | Every route, with Gemini stubbed | Free |
 | `python tests/e2e_stub.py` | A full browser round with Gemini stubbed (needs Playwright) | Free |
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
-| `python judge.py --selftest --audio` | Adds the voice transcription case (`tests/fixtures/sample.webm`) | One more call |
+| `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
 
 ## Calibration
 
@@ -61,6 +77,17 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - `resources.md` and `your-country.md` lose about half their text, which was link grids and buttons.
 - Only the script is tracked in git. `raw/`, `pages/` and `logs/` are gitignored because the content is third-party.
 - The scrape ran on 2026-10-27 over a direct connection, at Josh's instruction.
+- `data/site_gap_analysis_2026-10-27.md` (gitignored) compares the four key pages with the bank. They raise 69 objections and the bank misses 24. The report drafts 14 new items and 8 key-point additions, none of them applied yet.
+
+## Status
+
+- 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge) and passes `--selftest --audio` on a real recording.
+- TODO:
+  - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
+  - Decide which of the 14 items from the gap analysis to add.
+  - Rewrite the `tests/selftest.json` answers yourself.
+  - Run 20 calibration answers under prompt v2.
+  - Measure the cost per round.
 
 ## Credit
 
