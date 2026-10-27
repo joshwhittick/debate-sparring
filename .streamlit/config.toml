@@ -1,0 +1,11 @@
+[client]
+# Visitors see a generic message; tracebacks go to the server console only.
+showErrorDetails = "none"
+toolbarMode = "viewer"
+
+[server]
+# Megabytes; matches config.MAX_UPLOAD_MB so oversized recordings are refused before buffering.
+maxUploadSize = 5
+
+[browser]
+gatherUsageStats = false

@@ -248,5 +248,9 @@ def total_spend():
     return query_one("SELECT COALESCE(SUM(cost_usd), 0) AS s FROM answers")["s"]
 
 
+def spend_since(iso_ts):
+    return query_one("SELECT COALESCE(SUM(cost_usd), 0) AS s FROM answers WHERE created_at >= ?", (iso_ts,))["s"]
+
+
 def unjudged():
     return query("SELECT id, objection_id, status FROM answers WHERE status IN ('pending', 'failed') ORDER BY id")

@@ -23,6 +23,11 @@ GEMINI_TIER = os.getenv("GEMINI_TIER", "free").strip().lower()
 VOICE_ON_FREE_TIER = os.getenv("VOICE_ON_FREE_TIER", "").strip() == "1"
 # Streamlit only: when set, the app asks for this password first. Set it for any web deploy.
 APP_PASSWORD = os.getenv("APP_PASSWORD", "").strip()
+# Streamlit public mode (password required, History and calibration hidden). Unset: public unless served to
+# localhost. "1" forces it on, "0" off (ignored on Streamlit Cloud, which is always public).
+PUBLIC_DEPLOY = os.getenv("PUBLIC_DEPLOY", "").strip()
+# No new Gemini calls once today's (UTC) spend reaches this. Both front ends.
+DAILY_SPEND_LIMIT_USD = float(os.getenv("DAILY_SPEND_LIMIT_USD", "1.0") or 1.0)
 
 ROUND_SIZE = 5
 MAX_DIFFICULTY_3_PER_ROUND = 2
@@ -37,6 +42,9 @@ TIMERS = {
 GRACE_S = 10
 
 MAX_UPLOAD_MB = 5
+MAX_ANSWER_CHARS = 2000
+SESSION_CALL_LIMIT = 30  # Streamlit public mode: Gemini-spending actions per browser session
+MAX_OUTPUT_TOKENS = {"followup": 2048, "judge": 8192, "transcribe": 8192}  # includes thinking tokens
 CALL_TIMEOUT_MS = 30_000
 MAX_CALLS = 3
 FOLLOWUP_MAX_WORDS = 60

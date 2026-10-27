@@ -22,3 +22,6 @@ research/*/logs/
 **/secrets.toml
 *.key
 *.pem
+# Internal docs, kept locally only
+debate-sparring-mvp-prd.md
+TIDY_*.md

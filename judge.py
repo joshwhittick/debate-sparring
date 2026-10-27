@@ -92,9 +92,10 @@ _warned_models: set = set()
 _WRAPPER_TAGS = (
     "opener", "reply", "followup", "objection", "objection_category", "objection_as_put_to_them",
     "strongest_form_of_objection", "key_points_a_strong_answer_addresses", "reference_sources",
-    "empty_turns",
+    "empty_turns", "debate_context", "spoken_turns", "delivery_notes",
 )
-_TAG_RE = re.compile(r"<\s*(/?)\s*(" + "|".join(_WRAPPER_TAGS) + r")\b[^>]*>", re.IGNORECASE)
+# Matches the opening '<' of a wrapper tag even when the tag is never closed with '>'.
+_TAG_RE = re.compile(r"<(\s*/?\s*)(" + "|".join(_WRAPPER_TAGS) + r")\b", re.IGNORECASE)
 _PLACEHOLDER_RE = re.compile(r"\{([a-z_]+)\}")
 _HEALTH_RE = re.compile(r"\b(child|children|kid|kids|infant|baby|babies|pregnan\w*|supplement\w*|b12)\b", re.I)
 
@@ -131,7 +132,7 @@ def _fill(template: str, values: dict) -> str:
 
 def _escape(text: str | None) -> str:
     """Neutralise literal wrapper tags (opening and closing) inside user-supplied text."""
-    return _TAG_RE.sub(lambda m: f"&lt;{m.group(1)}{m.group(2)}&gt;", text or "")
+    return _TAG_RE.sub(lambda m: f"&lt;{m.group(1)}{m.group(2)}", text or "")
 
 
 def _blank(text: str | None) -> bool:
@@ -504,7 +505,8 @@ def make_followup(objection: dict, opener_text: str, model: str | None = None) -
     })
     system = _fill(system_tpl, {"max_words": limit})
     parts = [("text", _fill(input_tpl, values))]
-    return _run("make_followup", model, system, parts, None, _validate_followup)
+    return _run("make_followup", model, system, parts, None, _validate_followup,
+                max_out=config.MAX_OUTPUT_TOKENS["followup"])
 
 
 # ---------------------------------------------------------------------------
@@ -718,7 +720,8 @@ def judge_answer(objection: dict, opener_text: str, followup_text: str, reply_te
     })
     system = _fill(system_tpl, {"max_words": limit})
     parts = [("text", _fill(input_tpl, values))]
-    feedback, usage = _run("judge_answer", model, system, parts, FEEDBACK_SCHEMA, _validate_feedback)
+    feedback, usage = _run("judge_answer", model, system, parts, FEEDBACK_SCHEMA, _validate_feedback,
+                           max_out=config.MAX_OUTPUT_TOKENS["judge"])
 
     for turn, empty in (("opener", opener_empty), ("reply", reply_empty)):
         if empty and not any(f["type"] == "missed_point" and f["turn"] == turn for f in feedback["flags"]):
@@ -768,7 +771,8 @@ def transcribe(audio_bytes: bytes, mime: str, objection: dict | None = None,
     system, input_tpl = _read_prompt("transcribe.md")
     context = _transcribe_context(objection, followup_text)
     parts = [("text", _fill(input_tpl, {"context": context})), ("audio", audio_bytes, mime)]
-    return _run("transcribe", model, system, parts, TRANSCRIBE_SCHEMA, _validate_transcript)
+    return _run("transcribe", model, system, parts, TRANSCRIBE_SCHEMA, _validate_transcript,
+                max_out=config.MAX_OUTPUT_TOKENS["transcribe"])
 
 
 # ---------------------------------------------------------------------------

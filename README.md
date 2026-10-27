@@ -9,7 +9,7 @@ Two front ends share one core (`core.py`) and one database:
 | Front end | Run | Notes |
 |---|---|---|
 | Local web app (FastAPI + vanilla JS) | `python app.py` -> http://127.0.0.1:8000 | Timers auto-submit after the grace period; records WebM in the browser |
-| Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. Optional password gate |
+| Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. Public mode off localhost (see below) |
 
 ## Contents
 
@@ -19,6 +19,7 @@ Two front ends share one core (`core.py`) and one database:
 | `app.py` | FastAPI routes over `core`, startup checks (exits on a bad bank or rejected key) |
 | `streamlit_app.py` | Streamlit front end over `core`: Practice and History pages |
 | `.streamlit/secrets.toml.example` | Template for Streamlit Cloud secrets (`secrets.toml` itself is gitignored) |
+| `.streamlit/config.toml` | Hides tracebacks from visitors, caps uploads at 5 MB, turns off usage stats |
 | `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
 | `store.py` / `config.py` | SQLite access; every tunable value (timers, round size, upload limit, prices) |
 | `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v2), `transcribe.md` |
@@ -30,8 +31,7 @@ Two front ends share one core (`core.py`) and one database:
 | `logs/` (gitignored) | `app.log`, rotating; ids, timings and cost only |
 | `CLAUDE.md` | Agent context |
 | `research/carnismdebunked/` | Scraper and local copy of carnismdebunked.com (see Research material) |
-| `debate-sparring-mvp-prd.md` | The PRD the app was built from |
-| `TIDY_2026-10-27.md` | Tidy log |
+| `debate-sparring-mvp-prd.md`, `TIDY_*.md` (gitignored) | The PRD the app was built from, and tidy logs; kept locally only |
 
 ## Setup
 
@@ -46,11 +46,21 @@ At startup either front end validates the objection bank, then checks the key wi
 
 ### Streamlit Community Cloud
 
-1. The repo is on GitHub: `joshwhittick/debate-sparring` (private, personal account).
+1. The repo is on GitHub: `joshwhittick/debate-sparring`.
 2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`.
-3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key and an `APP_PASSWORD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
+3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key, a random `APP_PASSWORD` of 20+ characters and a `DAILY_SPEND_LIMIT_USD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
+4. Set a budget alert or quota cap on the Gemini key in Google Cloud as a second limit.
 
-On Cloud the SQLite database, recordings and logs live on the container's disk and are lost when the app restarts or redeploys. History and calibration are only durable locally.
+The Streamlit app runs in **public mode** on Streamlit Cloud, on any host other than localhost, or with `PUBLIC_DEPLOY=1`. It fails closed:
+
+- It refuses to run without `APP_PASSWORD`. A wrong password costs a 1 s delay.
+- Typed answers are capped at 2,000 characters, and each session gets 30 Gemini-spending actions.
+- Once today's (UTC) spend on that day's answers reaches `DAILY_SPEND_LIMIT_USD`, both front ends stop making new calls.
+- History and calibration are hidden, because every visitor shares one database.
+- Recordings are deleted once an answer is judged.
+- Errors show a generic message, never a traceback.
+
+On Cloud the SQLite database and logs live on the container's disk and are lost when the app restarts or redeploys. History and calibration are only durable locally.
 
 | `.env` | Meaning |
 |---|---|
@@ -59,15 +69,18 @@ On Cloud the SQLite database, recordings and logs live on the container's disk a
 | `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled when this is `paid` |
 | `VOICE_ON_FREE_TIER` | `1` enables Speak mode on the free tier anyway. Your recordings may then be used and human-reviewed by Google |
 | `GEMINI_API_SURFACE` | Optional. Set to `generate_content` if `interactions.create` misbehaves |
-| `APP_PASSWORD` | Streamlit only. When set, the page asks for it first. Set it on any web deploy, since every visitor spends your Gemini credit |
+| `APP_PASSWORD` | Streamlit only. Required in public mode (the app won't run without it); optional on localhost |
+| `PUBLIC_DEPLOY` | Streamlit only. Unset: public mode off localhost. `1` forces it on locally, `0` off (ignored on Streamlit Cloud) |
+| `DAILY_SPEND_LIMIT_USD` | Default `1.0`. No new Gemini calls once today's (UTC) spend reaches it |
 
-Timers, round size, the upload limit and prices are in `config.py`.
+Timers, round size, the upload and answer-length limits, the session call limit, output token caps and prices are in `config.py`.
 
 ## Data and privacy
 
 - Typed answers and voice recordings are sent to the Gemini API.
 - **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `GEMINI_TIER=paid` (a billed project) or you opt in with `VOICE_ON_FREE_TIER=1`.
-- Recordings are kept under `data/audio/` (`.webm` from the local app, `.wav` from Streamlit). You can delete them per answer from the feedback screen; the transcripts and scores are kept.
+- Recordings are kept under `data/audio/` (`.webm` from the local app, `.wav` from Streamlit). You can delete them per answer from the feedback screen; the transcripts and scores are kept. In Streamlit public mode they are deleted as soon as the answer is judged.
+- The start screen tells visitors that answers go to the Gemini API and may be used by Google on the free tier.
 - `logs/app.log` holds ids, timings, token counts and cost only. It never holds answer text or transcripts.
 
 ## Tests
@@ -75,7 +88,7 @@ Timers, round size, the upload limit and prices are in `config.py`.
 | Command | What it checks | Cost |
 |---|---|---|
 | `python tests/test_app.py` | Every route, with Gemini stubbed | Free |
-| `python tests/test_streamlit.py` | The Streamlit app via `AppTest`: round, skip, feedback, calibration, summary, history; Gemini stubbed | Free |
+| `python tests/test_streamlit.py` | The Streamlit app via `AppTest`: round, skip, feedback, calibration, summary, history, double-submit recovery, and public mode (password gate, hidden pages, session and daily limits, answer cap); Gemini stubbed | Free |
 | `python tests/e2e_stub.py` | A full browser round with Gemini stubbed (needs Playwright) | Free |
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
@@ -107,6 +120,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 
 - 2026-10-27: MVP built. Voice uses two calls (transcribe, then judge). The default model changed to `gemini-3.1-flash-lite`, which passes the full self-test including `--audio` on a real recording (that run cost $0.017).
 - 2026-10-27: Streamlit front end added. Shared logic moved from `app.py` into `core.py`; the FastAPI routes and responses are unchanged (`test_app.py` and `e2e_stub.py` pass).
+- 2026-10-27: hardened for a public deploy: fail-closed public mode, answer and output caps, session and daily spend limits, generic errors, wrapper-tag escaping for unclosed tags. The PRD and tidy logs left git.
 - TODO:
   - Deploy to Streamlit Cloud from `joshwhittick/debate-sparring`.
   - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.

@@ -192,7 +192,7 @@ def run_judge(answer_id):
         feedback, usage = judge.judge_answer(obj, row["opener_text"] or "", row["followup_text"] or "",
                                              row["reply_text"] or "", delivery=delivery,
                                              spoken={turn: row[f"{turn}_mode"] == "speak" for turn in TURNS})
-    except judge.JudgeError as e:
+    except (judge.JudgeError, judge.KeyRejected) as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("judge failed answer_id=%d: %s", answer_id, type(e).__name__)
         store.update_answer(answer_id, status="failed")
@@ -211,7 +211,7 @@ def generate_followup(answer_id):
     row = store.get_answer(answer_id)
     try:
         text, usage = judge.make_followup(BANK[row["objection_id"]], row["opener_text"] or "")
-    except judge.JudgeError as e:
+    except (judge.JudgeError, judge.KeyRejected) as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("followup failed answer_id=%d: %s", answer_id, type(e).__name__)
         return None
@@ -225,7 +225,10 @@ def check_turn(mode, text, data):
     if mode not in ("type", "speak"):
         raise CoreError(400, "bad_mode")
     if mode == "type":
-        return (text or "").strip(), None
+        text = (text or "").strip()
+        if len(text) > config.MAX_ANSWER_CHARS:
+            raise CoreError(413, "too_long", detail=f"Answers are limited to {config.MAX_ANSWER_CHARS} characters")
+        return text, None
     if not speak_enabled():
         raise CoreError(403, "speak_disabled", detail="Voice needs GEMINI_TIER=paid")
     if data is None:
@@ -235,6 +238,13 @@ def check_turn(mode, text, data):
     if not data:
         raise CoreError(400, "no_audio")
     return None, data
+
+
+def check_budget():
+    """Raises 429 daily_limit once today's (UTC) Gemini spend reaches DAILY_SPEND_LIMIT_USD."""
+    today = time.strftime("%Y-%m-%d", time.gmtime())
+    if store.spend_since(today) >= config.DAILY_SPEND_LIMIT_USD:
+        raise CoreError(429, "daily_limit", detail="Today's spending limit is reached; try again tomorrow")
 
 
 def audio_file(answer_id, turn):
@@ -258,7 +268,7 @@ def transcribe_turn(answer_id, turn, data, mime="audio/webm"):
         row = store.get_answer(answer_id)
         followup = row["followup_text"] if turn == "reply" else None
         result, usage = judge.transcribe(data, mime, objection=BANK[row["objection_id"]], followup_text=followup)
-    except judge.JudgeError as e:
+    except (judge.JudgeError, judge.KeyRejected) as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("transcribe failed answer_id=%d turn=%s: %s", answer_id, turn, type(e).__name__)
         result = {"transcript": "", "delivery": None}
@@ -310,6 +320,7 @@ def start_answer(round_id, objection_id, mode, text=None, data=None, mime="audio
     if not rnd or objection_id not in rnd["objection_ids"]:
         raise CoreError(404, "not_found")
     opener_text, data = check_turn(mode, text, data)
+    check_budget()
     answer_id = store.insert_answer(round_id, objection_id, mode, opener_text)
     if answer_id is None:
         raise CoreError(409, "duplicate")
@@ -328,6 +339,7 @@ def retry_followup(answer_id):
     row = require_answer(answer_id)
     if row["followup_text"]:
         return row["followup_text"]
+    check_budget()
     followup = generate_followup(answer_id)
     if followup is None:
         raise CoreError(502, "followup_failed", answer_id=answer_id)
@@ -347,6 +359,7 @@ def submit_reply(answer_id, mode, text=None, data=None, mime="audio/webm"):
     if row["reply_mode"]:
         raise CoreError(409, "duplicate")
     reply_text, data = check_turn(mode, text, data)
+    check_budget()
     store.update_answer(answer_id, reply_mode=mode, reply_text=reply_text, status="pending")
     if data is not None:
         store.update_answer(answer_id, reply_text=transcribe_turn(answer_id, "reply", data, mime))
@@ -357,6 +370,7 @@ def rejudge(answer_id):
     row = require_answer(answer_id)
     if not row["followup_text"] or not row["reply_mode"]:
         raise CoreError(409, "incomplete", detail="Both turns must be saved before judging")
+    check_budget()
     store.delete_calibrations(answer_id)
     return judged_out(run_judge(answer_id))
 

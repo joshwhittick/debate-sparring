@@ -1,7 +1,11 @@
 """Debate sparring app, Streamlit front end (local or Streamlit Community Cloud). Logic lives in `core`.
 
 Run: streamlit run streamlit_app.py
-On Streamlit Cloud, put GEMINI_API_KEY (and APP_PASSWORD) in the app's secrets.
+On Streamlit Cloud, put GEMINI_API_KEY and APP_PASSWORD in the app's secrets.
+
+Public mode (Streamlit Cloud, any host other than localhost, or PUBLIC_DEPLOY=1) fails closed: it refuses to run
+without APP_PASSWORD, hides History and calibration (the database is shared by every visitor), caps Gemini calls
+per session and deletes recordings once judged.
 """
 import hmac
 import os
@@ -25,52 +29,105 @@ import store  # noqa: E402
 st.set_page_config(page_title="Sparring Partner", page_icon="🌱")
 ss = st.session_state
 DISCLAIMER = "Debate practice, not medical or dietary advice."
+DATA_NOTICE = ("Your answers are sent to Google's Gemini API. On the free tier Google may use them to improve its "
+               "products, and people may review them. Don't include personal information.")
+SPENDING = {"start_answer", "retry_followup", "submit_reply", "rejudge"}  # core calls that reach Gemini
+LOCAL_HOSTS = {"localhost", "127.0.0.1", "[::1]", "::1"}
 DIM_LABELS = {"accuracy": "Accuracy", "logic": "Logic", "crux": "Crux", "concision": "Concision",
               "concession_discipline": "Concession discipline"}
 
 
 # --- startup ---
 
+class BootError(Exception):
+    pass
+
+
 @st.cache_resource
 def boot():
-    """Runs once per server process. Returns an error message, or None when ready."""
+    """Runs once per server process. Raises BootError (not cached, so the next page load retries) on failure."""
     try:
         core.init()
     except core.BankInvalid:
-        return "Objection bank failed validation - see logs/app.log"
+        raise BootError("Objection bank failed validation - see logs/app.log")
     if not config.GEMINI_API_KEY:
-        return "GEMINI_API_KEY is not set - add it to .env (local) or the app's secrets (Cloud)"
+        raise BootError("GEMINI_API_KEY is not set - add it to .env (local) or the app's secrets (Cloud)")
     try:
         judge.ping()
     except judge.KeyRejected:
-        return "API key rejected"
+        raise BootError("API key rejected")
+    except Exception as e:
+        core.log.error("startup ping failed: %s", type(e).__name__)
+        raise BootError("Gemini is unavailable right now - try again shortly")
     core.log.info("streamlit startup: model=%s tier=%s prompt_version=%s pending=%d", config.GEMINI_MODEL,
                   config.GEMINI_TIER, judge.PROMPT_VERSION, store.count_pending())
-    return None
+
+
+def is_public():
+    """True unless the page is served to localhost. Fails closed: an unknown host counts as public."""
+    if str(config.BASE_DIR).startswith("/mount/"):  # /mount/src is Streamlit Cloud
+        return True
+    if config.PUBLIC_DEPLOY in ("0", "1"):
+        return config.PUBLIC_DEPLOY == "1"
+    host = (st.context.headers.get("Host") or "").lower()
+    return host.rsplit(":", 1)[0] not in LOCAL_HOSTS if host else True
 
 
 def password_ok():
-    if not config.APP_PASSWORD or ss.get("authed"):
+    if ss.get("authed"):
+        return True
+    if not config.APP_PASSWORD:
+        if is_public():
+            st.error("APP_PASSWORD is not set. A public deploy needs one in the app's secrets.")
+            return False
         return True
     pw = st.text_input("Password", type="password")
     if pw and hmac.compare_digest(pw.encode(), config.APP_PASSWORD.encode()):
         ss.authed = True
         st.rerun()
     if pw:
+        time.sleep(1)  # slows guessing
         st.error("Wrong password")
     return False
 
 
 def call(fn, *args, **kwargs):
-    """Runs a core call; shows the error and returns None on CoreError."""
+    """Runs a core call; shows the error and returns None on failure. Counts Gemini calls in public mode."""
+    if fn.__name__ in SPENDING and ss.public:
+        if ss.get("calls", 0) >= config.SESSION_CALL_LIMIT:
+            st.error("Session limit reached. Reload the page to start a new session.")
+            return None
+        ss.calls = ss.get("calls", 0) + 1
     try:
         return fn(*args, **kwargs)
     except core.CoreError as e:
         if e.code == "followup_failed":
             ss.answer_id, ss.phase = e.extra["answer_id"], "followup_failed"
             st.rerun()
+        if e.code == "duplicate":  # a double click already saved this turn
+            recover_duplicate()
         st.error(f"{e.code.replace('_', ' ').capitalize()}{' - ' + e.extra['detail'] if 'detail' in e.extra else ''}")
         return None
+    except Exception as e:  # never show a traceback to a visitor
+        core.log.error("%s failed: %s", fn.__name__, type(e).__name__)
+        st.error("Something went wrong. Try again.")
+        return None
+
+
+def recover_duplicate():
+    """After a double click, reruns on the screen for the turn that was saved (returns only if it can't)."""
+    rnd = ss.round
+    if ss.phase == "opener":
+        obj_id = rnd["objections"][rnd["idx"]]["id"]
+        row = next((a for a in store.round_answers(rnd["id"]) if a["objection_id"] == obj_id), None)
+        if row:
+            ss.answer_id, ss.turn_started = row["id"], time.time()
+            ss.phase = "reply" if row["followup_text"] else "followup_failed"
+            st.rerun()
+    elif ss.phase == "reply" and ss.answer_id:
+        ss.result = core.judged_out(store.get_answer(ss.answer_id))
+        ss.phase = "feedback"
+        st.rerun()
 
 
 # --- round state ---
@@ -120,7 +177,7 @@ def turn_input(turn, key):
     if not ss.round["study"]:
         countdown(config.TIMERS["opener" if turn == "opener" else "followup"][mode])
     if mode == "type":
-        text = st.text_area("Your answer", key=f"text_{key}", height=160)
+        text = st.text_area("Your answer", key=f"text_{key}", height=160, max_chars=config.MAX_ANSWER_CHARS)
         if st.button("Submit", key=f"submit_{key}", type="primary", disabled=not text.strip()):
             return mode, text, None, None
         return None
@@ -195,13 +252,16 @@ def start_screen():
                                 format_func=lambda c: c.capitalize() if c else "All")
         study = st.checkbox("Study mode (untimed)")
         shuffle = st.checkbox("Shuffle (ignore how often each objection has come up)")
-        calibration = st.checkbox("Calibration mode (score yourself before seeing feedback)")
-        reviewer = st.selectbox("Reviewer", ["josh", "second"])
+        calibration, reviewer = False, None
+        if not ss.public:  # calibration stats are shared, so only offered locally
+            calibration = st.checkbox("Calibration mode (score yourself before seeing feedback)")
+            reviewer = st.selectbox("Reviewer", ["josh", "second"])
         if st.form_submit_button("Start round", type="primary"):
             start_round(category, study, shuffle, calibration, reviewer)
             st.rerun()
     if not core.speak_enabled():
         st.caption("Speak mode is off: it needs GEMINI_TIER=paid, or VOICE_ON_FREE_TIER=1.")
+    st.caption(DATA_NOTICE)
 
 
 def objection_header():
@@ -267,6 +327,9 @@ def reply_screen():
         with st.spinner("Judging..."):
             out = call(core.submit_reply, ss.answer_id, mode, text, data, mime or "audio/webm")
         if out:
+            if ss.public and out["status"] == "judged":  # the shared disk keeps no recordings
+                core.delete_audio(ss.answer_id)
+                out = core.judged_out(store.get_answer(ss.answer_id))
             ss.result = out
             ss.phase = "calibrate" if ss.round["calibration"] and out["status"] == "judged" else "feedback"
             st.rerun()
@@ -327,6 +390,8 @@ def practice_page():
     if not ss.get("round") or not ss.get("phase"):
         start_screen()
         return
+    if ss.phase == "summary" and not ss.round["objections"]:
+        st.info("No objections left for this category.")
     {"opener": opener_screen, "followup_failed": followup_failed_screen, "reply": reply_screen,
      "calibrate": calibrate_screen, "feedback": feedback_screen, "summary": summary_screen}[ss.phase]()
 
@@ -364,11 +429,16 @@ def history_page():
 
 def main():
     st.title("Sparring Partner")
+    ss.public = is_public()
     if not password_ok():
         return
-    error = boot()
-    if error:
-        st.error(error)
+    try:
+        boot()
+    except BootError as e:
+        st.error(str(e))
+        return
+    if ss.public:  # History shows every visitor's rounds and spend, so it is local only
+        practice_page()
         return
     page = st.sidebar.radio("Page", ["Practice", "History"], label_visibility="collapsed")
     st.sidebar.caption(f"Model: {config.GEMINI_MODEL} · tier: {config.GEMINI_TIER}")
