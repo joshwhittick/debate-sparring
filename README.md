@@ -27,7 +27,7 @@ Two front ends share one core (`core.py`) and one database:
 | `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v3), `transcribe.md` |
 | `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
 | `data/objections.json` | Objection bank: 53 items (nature 8, health 11, ethics 14, environment 9, personal 11), all `reviewed: false`. The only tracked file in `data/` |
-| `data/` (gitignored) | `sparring.db`, `audio/`, plus the review reports `bank_review_2026-10-27.md` and `site_gap_analysis_2026-10-27.md` |
+| `data/` (gitignored) | `sparring.db`, `audio/`, Josh's checklist `YOUR_TODO.md`, and the review reports `bank_review_2026-10-27.md`, `site_gap_analysis_2026-10-27.md`, `bank_fixes_2026-10-28.md` and `gap_shortlist_2026-10-28.md` |
 | `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` (browser), `selftest.json`; `fixtures/` holds a gitignored recording |
 | `requirements.txt`, `requirements-dev.txt`, `.env.example` | Python packages (runtime; dev adds `httpx2`, which Starlette's TestClient prefers over `httpx`); env template (copy to `.env`, gitignored) |
 | `logs/` (gitignored) | `app.log`, rotating; ids, timings and cost only |
@@ -38,7 +38,7 @@ Two front ends share one core (`core.py`) and one database:
 ## Setup
 
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt   # or requirements-dev.txt to run the tests
 copy .env.example .env      # then add GEMINI_API_KEY
 python app.py               # http://127.0.0.1:8000
 streamlit run streamlit_app.py   # or the Streamlit version, http://localhost:8501
@@ -120,7 +120,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - `resources.md` and `your-country.md` lose about half their text, which was link grids and buttons.
 - Only the script is tracked in git. `raw/`, `pages/` and `logs/` are gitignored because the content is third-party.
 - The scrape ran on 2026-10-27 over a direct connection, at Josh's instruction.
-- `data/site_gap_analysis_2026-10-27.md` (gitignored) compares the four key pages with the bank. They raise 69 objections and the bank misses 24. The report drafts 14 new items and 8 key-point additions, none of them applied yet.
+- `data/site_gap_analysis_2026-10-27.md` (gitignored) compares the four key pages with the bank. They raise 69 objections and the bank misses 24. The report drafted 14 new items and 8 key-point additions; 13 items and 7 key points were applied on 2026-10-28 after source checks (`data/gap_shortlist_2026-10-28.md`).
 
 ## Status
 
@@ -130,7 +130,8 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-27: repo made public and deployed to Streamlit Community Cloud at https://vegan-debate.streamlit.app/ (main file `streamlit_app.py`).
 - 2026-10-28: bank fixes from the pre-review applied, the 2 wrong citations replaced and the 7 manual checks resolved (report: `data/bank_fixes_2026-10-28.md`, gitignored). 13 items from the gap analysis added after source checks (`data/gap_shortlist_2026-10-28.md`), plus 7 key-point additions. Judge prompt v3: flags only fallacies the person commits and credits correctly naming the objection's fallacy. `--selftest --audio` passes under v3 ($0.0175). Cost per round measured.
 - 2026-10-28: M7 one-call spike run 3 times. It returns valid JSON, but it saves only about 2% and its latency varied from 4 s to 37 s, so voice stays on the two-call path for good.
-- TODO:
+- 2026-10-28: health-02 and health-03 cite the Academy of Nutrition and Dietetics 2025 adults paper (the 2016 paper stays for all life stages). `requirements-dev.txt` adds `httpx2` for the tests (commit `f610fb3`).
+- TODO (checklist in `data/YOUR_TODO.md`):
   - Read the changed and new items and set `reviewed: true` per item. The bank stays a Claude draft until then. Open points are listed at the end of the two reports in `data/`.
   - Rewrite the `tests/selftest.json` answers yourself.
   - Run 20 calibration answers under prompt v3.
