@@ -31,6 +31,13 @@ ss = st.session_state
 DISCLAIMER = "Debate practice, not medical or dietary advice."
 DATA_NOTICE = ("Your answers are sent to Google's Gemini API. On the free tier Google may use them to improve its "
                "products, and people may review them. Don't include personal information.")
+if config.TRANSCRIBER == "whisper":
+    VOICE_NOTICE = "Your recording is transcribed on this server and is not sent to Google; only the text is."
+elif config.GEMINI_TIER == "paid":
+    VOICE_NOTICE = "Your recording is sent to Google's Gemini API to be transcribed."
+else:
+    VOICE_NOTICE = ("Your recording is sent to Google's Gemini API. On the free tier Google may use it to improve "
+                    "its products, and people may listen to it.")
 SPENDING = {"start_answer", "retry_followup", "submit_reply", "rejudge"}  # core calls that reach Gemini
 LOCAL_HOSTS = {"localhost", "127.0.0.1", "[::1]", "::1"}
 DIM_LABELS = {"accuracy": "Accuracy", "logic": "Logic", "crux": "Crux", "concision": "Concision",
@@ -191,6 +198,7 @@ def turn_input(turn, key):
             return mode, text, None, None
         return None
     audio = st.audio_input("Record your answer", key=f"audio_{key}")
+    st.caption(VOICE_NOTICE)
     if st.button("Submit", key=f"submit_{key}", type="primary", disabled=audio is None):
         return mode, None, audio.getvalue(), audio.type or "audio/wav"
     return None
@@ -269,7 +277,7 @@ def start_screen():
             start_round(category, study, shuffle, calibration, reviewer)
             st.rerun()
     if not core.speak_enabled():
-        st.caption("Speak mode is off: it needs GEMINI_TIER=paid, or VOICE_ON_FREE_TIER=1.")
+        st.caption("Speak mode is off: it needs TRANSCRIBER=whisper, GEMINI_TIER=paid or VOICE_ON_FREE_TIER=1.")
     st.caption(DATA_NOTICE)
 
 

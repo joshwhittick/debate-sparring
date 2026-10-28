@@ -23,6 +23,7 @@ Two front ends share one core (`core.py`) and one database:
 | `.streamlit/secrets.toml.example` | Template for Streamlit Cloud secrets (`secrets.toml` itself is gitignored) |
 | `.streamlit/config.toml` | Hides tracebacks from visitors, caps uploads at 5 MB, turns off usage stats |
 | `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
+| `whisper_local.py` | Local speech-to-text with faster-whisper, used instead of Gemini transcription when `TRANSCRIBER=whisper` |
 | `store.py` / `config.py` | SQLite access; every tunable value (timers, round size, upload limit, prices) |
 | `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v3), `transcribe.md` |
 | `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
@@ -70,6 +71,8 @@ On Cloud the SQLite database and logs live on the container's disk and are lost 
 | `GEMINI_MODEL` | Default `gemini-3.1-flash-lite`, the cheapest model that passes the self-test ($0.25 / $1.50 per 1M tokens). `gemini-3.5-flash-lite` also passes. `gemini-2.5-flash-lite` is closed to new users |
 | `GEMINI_TIER` | `free` (default) or `paid`. Speak mode is enabled when this is `paid` |
 | `VOICE_ON_FREE_TIER` | `1` enables Speak mode on the free tier anyway. Your recordings may then be used and human-reviewed by Google |
+| `TRANSCRIBER` | `gemini` (default): Gemini transcribes with the objection as context and adds delivery notes. `whisper`: faster-whisper transcribes on the server, the audio never goes to Google, and Speak mode is on whatever the tier. No delivery notes |
+| `WHISPER_MODEL` | Default `small.en` (about 460 MB, downloaded from Hugging Face on first use). `base.en` is about 140 MB and faster but noticeably less accurate |
 | `GEMINI_API_SURFACE` | Optional. Set to `generate_content` if `interactions.create` misbehaves |
 | `APP_PASSWORD` | Streamlit only. Required in public mode (the app won't run without it); optional on localhost |
 | `PUBLIC_DEPLOY` | Streamlit only. Unset: public mode off localhost. `1` forces it on locally, `0` off (ignored on Streamlit Cloud) |
@@ -80,7 +83,8 @@ Timers, round size, the upload and answer-length limits, the session call limit,
 ## Data and privacy
 
 - Typed answers and voice recordings are sent to the Gemini API.
-- **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `GEMINI_TIER=paid` (a billed project) or you opt in with `VOICE_ON_FREE_TIER=1`.
+- **On the free tier, Google may use and human-review content. Deleting locally doesn't delete Google's copy.** For that reason, Speak mode stays disabled unless `TRANSCRIBER=whisper` (recordings are transcribed locally and only the text goes to Gemini), `GEMINI_TIER=paid` (a billed project), or you opt in with `VOICE_ON_FREE_TIER=1`.
+- The Streamlit record button has a caption saying where the recording goes for the current setting.
 - Recordings are kept under `data/audio/` (`.webm` from the local app, `.wav` from Streamlit). You can delete them per answer from the feedback screen; the transcripts and scores are kept. In Streamlit public mode they are deleted as soon as the answer is judged.
 - The start screen tells visitors that answers go to the Gemini API and may be used by Google on the free tier.
 - `logs/app.log` holds ids, timings, token counts and cost only. It never holds answer text or transcripts.
@@ -97,6 +101,7 @@ Install `requirements-dev.txt` first; without `httpx2` the tests still pass but 
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
 | `python tests/measure_round_cost.py` | Plays one live round of 5 typed answers through `core` and prints tokens and cost; uses a temp DB, so `data/sparring.db` is untouched | 10 calls, under 1 cent |
+| `python tests/check_whisper.py [PATH] [--model base.en]` | Local Whisper on a real recording (default `tests/fixtures/sample.webm`): load time, transcription time, transcript | Free; first run downloads the model |
 | `python tests/spike_one_call_audio.py` | M7 spike: one-call (transcribe and judge together) against the two-call path on `tests/fixtures/sample.webm` | About 3 calls per run |
 
 ## Calibration
@@ -131,6 +136,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-28: bank fixes from the pre-review applied, the 2 wrong citations replaced and the 7 manual checks resolved (report: `data/bank_fixes_2026-10-28.md`, gitignored). 13 items from the gap analysis added after source checks (`data/gap_shortlist_2026-10-28.md`), plus 7 key-point additions. Judge prompt v3: flags only fallacies the person commits and credits correctly naming the objection's fallacy. `--selftest --audio` passes under v3 ($0.0175). Cost per round measured.
 - 2026-10-28: M7 one-call spike run 3 times. It returns valid JSON, but it saves only about 2% and its latency varied from 4 s to 37 s, so voice stays on the two-call path for good.
 - 2026-10-28: health-02 and health-03 cite the Academy of Nutrition and Dietetics 2025 adults paper (the 2016 paper stays for all life stages). `requirements-dev.txt` adds `httpx2` for the tests (commit `f610fb3`).
+- 2026-10-28: optional local Whisper transcription (`TRANSCRIBER=whisper`), which enables Speak mode on the free tier without sending audio to Google. On the 50-second sample (on Josh's laptop CPU), `small.en` took 6.8 s and gave a clean transcript; `base.en` took 2.5 s and garbled several words. The model warms up in a background thread at startup.
 - TODO (checklist in `data/YOUR_TODO.md`):
   - Read the changed and new items and set `reviewed: true` per item. The bank stays a Claude draft until then. Open points are listed at the end of the two reports in `data/`.
   - Rewrite the `tests/selftest.json` answers yourself.

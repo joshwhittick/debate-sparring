@@ -198,6 +198,19 @@ def main():
               client.post("/answers", data={"round_id": rid, "objection_id": objs[0]["id"], "mode": "speak"},
                           files={"audio": ("a.webm", b"x", "audio/webm")}).status_code == 403)
 
+        # Local Whisper: Speak works on the free tier and Gemini never gets the audio.
+        import whisper_local
+        whisper_local.transcribe = lambda data, mime, objection=None, followup_text=None, model=None: (
+            {"transcript": "whisper words", "delivery": None},
+            {"model": "whisper-stub", "input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0})
+        judge.transcribe = lambda *a, **k: (_ for _ in ()).throw(AssertionError("Gemini got the audio"))
+        config.TRANSCRIBER = "whisper"
+        check("config speak_enabled on free tier with whisper", client.get("/config").json()["speak_enabled"] is True)
+        r3 = client.post("/rounds", json={"category": None}).json()
+        w = play_answer(client, r3["round_id"], r3["objections"][0]["id"], mode="speak")
+        check("whisper transcribes the opener", w.status_code == 200 and w.json().get("opener_transcript") == "whisper words")
+        config.TRANSCRIBER = "gemini"
+
     log_text = (config.LOG_DIR / "app.log").read_text(encoding="utf-8")
     check("log has no answer text", "my opener" not in log_text and "spoken words" not in log_text)
     shutil.rmtree(TMP, ignore_errors=True)

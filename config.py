@@ -21,6 +21,10 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite").strip()
 GEMINI_TIER = os.getenv("GEMINI_TIER", "free").strip().lower()
 # Opt-in: on the free tier Google may use and human-review recordings (see README).
 VOICE_ON_FREE_TIER = os.getenv("VOICE_ON_FREE_TIER", "").strip() == "1"
+# Who turns recordings into text: "gemini" (sends audio to Google, adds delivery notes) or "whisper"
+# (faster-whisper on this machine; audio stays local, so Speak mode needs no paid tier or opt-in).
+TRANSCRIBER = os.getenv("TRANSCRIBER", "gemini").strip().lower()
+WHISPER_MODEL = os.getenv("WHISPER_MODEL", "small.en").strip()
 # Streamlit only: when set, the app asks for this password first. Set it for any web deploy.
 APP_PASSWORD = os.getenv("APP_PASSWORD", "").strip()
 # Streamlit public mode (password required, History and calibration hidden). Unset: public unless served to

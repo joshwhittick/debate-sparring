@@ -8,6 +8,7 @@ Vegan-debate practice app. Spec: `debate-sparring-mvp-prd.md` (milestones M1-M8,
 - `judge.py`: Gemini calls (`make_followup`, `judge_answer`, `transcribe`, `ping`), retry budget, cost, and the `--selftest` CLI.
 - `store.py`: SQLite, one connection per call.
 - `config.py`: every tunable value. `static/` is a vanilla JS single page, mounted at `/static`.
+- `whisper_local.py`: faster-whisper transcription with the same contract as `judge.transcribe`; `core.transcriber()` picks it when `TRANSCRIBER=whisper`. That setting also turns Speak mode on regardless of tier, since audio never reaches Google.
 - Voice uses the two-call path: `transcribe`, then judge the text. The one-call path was tested (`tests/spike_one_call_audio.py`, 2026-10-28) and dropped: about 2% cheaper, less predictable latency.
 - Re-judging overwrites the verdict but adds to tokens and cost, so total spend stays true. This deviates from the PRD wording on purpose.
 - `data/objections.json` is a Claude draft: all 53 items are `reviewed: false` until Josh reads them. The citations were web-checked by agents on 2026-10-28; the open points are in `data/bank_fixes_2026-10-28.md` and `data/gap_shortlist_2026-10-28.md` (gitignored).

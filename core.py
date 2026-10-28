@@ -6,6 +6,7 @@ public functions below; a CoreError carries the HTTP status and error code a rou
 import json
 import logging
 import random
+import threading
 import time
 from logging.handlers import RotatingFileHandler
 
@@ -92,10 +93,21 @@ def init():
     config.AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     load_bank()
     store.init_db()
+    if config.TRANSCRIBER == "whisper":  # warm the model in the background so the first Speak turn isn't slow
+        import whisper_local
+        threading.Thread(target=whisper_local.get_model, daemon=True, name="whisper-warmup").start()
 
 
 def speak_enabled():
-    return config.GEMINI_TIER == "paid" or config.VOICE_ON_FREE_TIER
+    return config.TRANSCRIBER == "whisper" or config.GEMINI_TIER == "paid" or config.VOICE_ON_FREE_TIER
+
+
+def transcriber():
+    """judge.transcribe (Gemini) or whisper_local.transcribe; same signature and return shape."""
+    if config.TRANSCRIBER == "whisper":
+        import whisper_local
+        return whisper_local.transcribe
+    return judge.transcribe
 
 
 def client_config():
@@ -230,7 +242,7 @@ def check_turn(mode, text, data):
             raise CoreError(413, "too_long", detail=f"Answers are limited to {config.MAX_ANSWER_CHARS} characters")
         return text, None
     if not speak_enabled():
-        raise CoreError(403, "speak_disabled", detail="Voice needs GEMINI_TIER=paid")
+        raise CoreError(403, "speak_disabled", detail="Voice needs TRANSCRIBER=whisper or GEMINI_TIER=paid")
     if data is None:
         raise CoreError(400, "no_audio")
     if data is TOO_LARGE or len(data) > config.MAX_UPLOAD_MB * 1024 * 1024:
@@ -267,7 +279,7 @@ def transcribe_turn(answer_id, turn, data, mime="audio/webm"):
     try:
         row = store.get_answer(answer_id)
         followup = row["followup_text"] if turn == "reply" else None
-        result, usage = judge.transcribe(data, mime, objection=BANK[row["objection_id"]], followup_text=followup)
+        result, usage = transcriber()(data, mime, objection=BANK[row["objection_id"]], followup_text=followup)
     except (judge.JudgeError, judge.KeyRejected) as e:
         store.add_usage(answer_id, getattr(e, "usage", None) or {})
         log.error("transcribe failed answer_id=%d turn=%s: %s", answer_id, turn, type(e).__name__)
