@@ -49,7 +49,7 @@ At startup either front end validates the objection bank, then checks the key wi
 ### Streamlit Community Cloud
 
 1. The repo is on GitHub: `joshwhittick/debate-sparring`.
-2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`.
+2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`. Not `app.py`: that starts FastAPI, which never sees the Cloud secrets and exits with "GEMINI_API_KEY is not set".
 3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key, a random `APP_PASSWORD` of 20+ characters and a `DAILY_SPEND_LIMIT_USD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
 4. Set a budget alert or quota cap on the Gemini key in Google Cloud as a second limit.
 
