@@ -9,7 +9,8 @@
     "key_points": [
       "Separate what animals do from what moral agents ought to do: lions cannot reflect on alternatives or survive without meat",
       "Address that humans can choose among diets and, in most places, can do well without animal products",
-      "Concede that eating meat is natural without letting 'natural' settle whether it is right"
+      "Concede that eating meat is natural without letting 'natural' settle whether it is right",
+      "Point out that having the power to do something does not make it right, since the same reasoning would excuse harming vulnerable people; the question is whether the harm is justified"
     ],
     "sources": [
       "Singer, P. (1975). Animal Liberation. New York: New York Review, distributed by Random House.",
@@ -218,10 +219,12 @@
     "key_points": [
       "Acknowledge that conversion of ALA to EPA and DHA is limited and varies between people",
       "Note that algae provide EPA and DHA directly, and that fish accumulate them from algae",
-      "Avoid claiming that flaxseed or similar foods fully replace long-chain omega-3, and avoid treating the evidence for benefit as settled in every respect"
+      "Avoid claiming that flaxseed or similar foods fully replace long-chain omega-3, and avoid treating the evidence for benefit as settled in every respect",
+      "Mention that fish also carry mercury and other pollutants, and that NHS advice limits oily fish to two portions a week in pregnancy and says to avoid shark, swordfish and marlin; use this as a caution only, not as an argument against eating fish"
     ],
     "sources": [
       "Burdge, G. C. & Calder, P. C. (2005). Conversion of alpha-linolenic acid to longer-chain polyunsaturated fatty acids in human adults. Reproduction Nutrition Development 45(5): 581-597.",
+      "NHS. Fish and shellfish nutrition (NHS website, Live Well: Eat well).",
       "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980."
     ]
   },
@@ -281,6 +284,63 @@
     ]
   },
   {
+    "id": "health-09",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Athletes have high protein and energy needs. Plant proteins are on average less digestible and lower in some amino acids, so a vegan athlete has to plan more carefully, and elite performance is where small nutritional shortfalls show first.",
+    "text": "Elite performance needs a lot of protein and quick recovery. Can a vegan really build muscle and compete at a high level, or are those athletes the exception?",
+    "key_points": [
+      "Acknowledge that athletes need more energy and protein and that planning matters more for them; the Academy of Nutrition and Dietetics position says well-planned vegan diets can suit athletes",
+      "Note that one 12-week trial in young men found similar muscle gains on protein-matched vegan and omnivorous diets, and a study of recreational runners found similar exercise capacity, while stressing that these studies are small and short and neither involved elite athletes",
+      "Avoid claiming a vegan diet improves performance; the evidence points to comparable performance, not an advantage",
+      "Mention that B12 needs a supplement and that a registered dietitian or sports nutritionist can check iron, vitamin D and total energy, and do not give individual advice"
+    ],
+    "sources": [
+      "Hevia-Larra\u00edn, V. et al. (2021). High-protein plant-based diet versus a protein-matched omnivorous diet to support resistance training adaptations: a comparison between habitual vegans and omnivores. Sports Medicine 51(6): 1317-1330.",
+      "Nebl, J. et al. (2019). Exercise capacity of vegan, lacto-ovo-vegetarian and omnivorous recreational runners. Journal of the International Society of Sports Nutrition 16: 23.",
+      "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980."
+    ]
+  },
+  {
+    "id": "health-10",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Studies of vegans show lower average iodine intake, vitamin D status falls in winter, and calcium can fall short without fortified foods. A diet that only works with fortification, supplements and planning is more fragile than one that meets these needs from ordinary food.",
+    "text": "Beyond B12, vegans are at risk of low iodine, vitamin D and calcium. Isn't a diet that needs several supplements and careful tracking a poor fit for most people?",
+    "key_points": [
+      "Acknowledge that iodine is a real concern: most plant drinks are not iodine-fortified and vegans have lower iodine status on average, so it needs deliberate planning, and seaweed is an unreliable fix because its iodine content varies widely and can be excessive",
+      "Note that UK guidance advises everyone to consider vitamin D in autumn and winter, so this is not a problem unique to vegans",
+      "Cover calcium through fortified drinks, calcium-set tofu and some greens, and acknowledge that vegans had a higher fracture risk in a large UK cohort, which the authors linked to lower calcium intake",
+      "Say B12 is not optional and send the person to a GP or registered dietitian for personal advice and blood tests, without giving individual doses"
+    ],
+    "sources": [
+      "Eveleigh, E. R. et al. (2020). Vegans, vegetarians, and omnivores: how does dietary choice influence iodine intake? A systematic review. Nutrients 12(6): 1606.",
+      "Bath, S. C. et al. (2017). Iodine concentration of milk-alternative drinks available in the UK in comparison with cows' milk. British Journal of Nutrition 118(7): 525-532.",
+      "Appleby, P. et al. (2007). Comparative fracture risk in vegetarians and nonvegetarians in EPIC-Oxford. European Journal of Clinical Nutrition 61(12): 1400-1406.",
+      "Scientific Advisory Committee on Nutrition (2016). Vitamin D and Health. Public Health England."
+    ]
+  },
+  {
+    "id": "health-11",
+    "category": "health",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "The strongest cancer evidence concerns processed meat. Fresh red meat is classed as probably carcinogenic on more limited evidence, and for moderate intake the absolute increase in risk is small. Avoiding it entirely on cancer grounds overstates what the evidence supports.",
+    "text": "The cancer warnings are about bacon and sausages, not plain fresh meat, and almost everything seems to get blamed for cancer these days. Isn't unprocessed red meat fine?",
+    "key_points": [
+      "Concede the distinction: IARC classes processed meat as carcinogenic to humans (Group 1) and unprocessed red meat as probably carcinogenic (Group 2A) on limited evidence",
+      "Explain that these classes describe how strong the evidence is, not how large the risk is, so processed meat is not as dangerous as tobacco even though both are in Group 1",
+      "Frame risk as relative and absolute: IARC estimated about 18 percent higher bowel cancer risk per 50 g of processed meat eaten daily, which it describes as a small increase, so the absolute change for one person is small",
+      "Avoid saying all meat causes cancer, since IARC says red meat has not been established as a cause; refer personal questions to a GP or dietitian, and note that a vegan diet needs B12 supplementation"
+    ],
+    "sources": [
+      "Bouvard, V. et al. (2015). Carcinogenicity of consumption of red and processed meat. The Lancet Oncology 16(16): 1599-1600. (summarises the IARC Monographs Volume 114 evaluation)",
+      "IARC (2015). Q&A on the carcinogenicity of the consumption of red meat and processed meat. IARC Monographs Volume 114."
+    ]
+  },
+  {
     "id": "ethics-01",
     "category": "ethics",
     "difficulty": 1,
@@ -326,7 +386,8 @@
     "key_points": [
       "Acknowledge that welfare differs enormously between systems and that high-welfare farming is better than intensive farming",
       "Address whether killing an animal that would otherwise go on living is itself a harm, even if the death is painless",
-      "Address practical limits: how much high-welfare supply exists, whether labels match reality, and welfare issues in breeding, transport and slaughter"
+      "Address practical limits: how much high-welfare supply exists, whether labels match reality, and welfare issues in breeding, transport and slaughter",
+      "Ask what 'humane' covers when a healthy animal is killed at a small fraction of its natural lifespan (broiler chickens at about six weeks and pigs at about six months, against natural lifespans of years)"
     ],
     "sources": [
       "Fraser, D. (2008). Understanding Animal Welfare: The Science in its Cultural Context. Wiley-Blackwell.",
@@ -380,7 +441,8 @@
     "key_points": [
       "Address whether non-existence harms or benefits anyone in the way harming an existing animal does",
       "Distinguish the theory (a good life) from the practice, since most farmed animals live in intensive systems with poor welfare",
-      "Engage with replaceability views and with views where each individual's life matters, instead of treating the question as obvious"
+      "Engage with replaceability views and with views where each individual's life matters, instead of treating the question as obvious",
+      "Test 'they would not exist otherwise' on a case where the life is pleasant until the killing, such as happy dogs bred and kept to be eaten: if that still seems wrong, being brought into existence does not settle the question"
     ],
     "sources": [
       "Matheny, G. & Chan, K. M. A. (2005). Human diets and animal welfare: the illogic of the larder argument. Journal of Agricultural and Environmental Ethics 18: 579-594.",
@@ -423,6 +485,116 @@
       "Davis, S. L. (2003). The least harm principle may require that humans consume a diet containing large herbivores, not a vegan diet. Journal of Agricultural and Environmental Ethics 16: 387-394.",
       "Matheny, G. (2003). Least harm: a defense of vegetarianism from Steven Davis's omnivorous proposal. Journal of Agricultural and Environmental Ethics 16: 505-511.",
       "Fischer, B. & Lamey, A. (2018). Field deaths in plant agriculture. Journal of Agricultural and Environmental Ethics 31: 409-428."
+    ]
+  },
+  {
+    "id": "ethics-09",
+    "category": "ethics",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "People draw lines between companion, working and food animals, and those lines feel natural to anyone raised inside them. Loving a pet while eating a farmed animal need not be hypocrisy, because the relationship, not the species, may be what carries the moral weight.",
+    "text": "I love my dog and would never eat it, but pigs and cows are food. Everyone treats some animals as family and others as dinner. Why is that inconsistent rather than just normal?",
+    "key_points": [
+      "Ask what relevant difference separates the dog from the pig, and note that reviews of pig cognition describe complex learning, social and emotional abilities, although pigs are studied far less than dogs",
+      "Acknowledge that relationships carry moral weight, but point out that a relationship is something we create and does not decide whether the animal can suffer",
+      "Note that the line between pet and food moves between cultures and eras, which suggests custom as much as principle",
+      "Avoid accusing the person of cruelty; ask what would make eating a dog wrong and test whether that reason applies to a pig"
+    ],
+    "sources": [
+      "Herzog, H. (2010). Some We Love, Some We Hate, Some We Eat: Why It's So Hard to Think Straight About Animals. Harper.",
+      "Joy, M. (2009). Why We Love Dogs, Eat Pigs, and Wear Cows: An Introduction to Carnism. Conari Press.",
+      "Marino, L. & Colvin, C. M. (2015). Thinking pigs: a comparative review of cognition, emotion, and personality in Sus domesticus. International Journal of Comparative Psychology 28.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-10",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Humans have language, abstract reasoning and moral agency far beyond any other species, and many ethical traditions tie moral status to those capacities. If humans have a higher standing, weighing a person's taste or convenience above an animal's life is not obviously a mistake.",
+    "text": "Humans have language, moral reasoning and culture that animals lack. That makes us a morally different kind of being, so why shouldn't our interests outweigh theirs when it comes to food?",
+    "key_points": [
+      "Concede that humans differ greatly in cognitive capacity and that many thoughtful people think this matters morally",
+      "Separate 'more status' from 'no status': the question is whether a gap in intelligence justifies causing suffering for taste, not whether humans and animals are equal",
+      "Ask whether a far more intelligent species would be justified in using humans for food on the same reasoning, to test whether intelligence alone is the criterion",
+      "Note that moral concern is usually grounded in the capacity to suffer rather than in intelligence, so the burden is to explain why intelligence should count for more"
+    ],
+    "sources": [
+      "Singer, P. (1975). Animal Liberation. New York Review / Random House.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-11",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Most of ordinary life is organised around pleasure, and nobody demands a life-or-death justification for every choice. Eating animals is enjoyable and long established, so critics need to show it is wrong rather than assume that taste is an inadequate reason.",
+    "text": "I enjoy eating meat and I'm not in danger of starving. Pleasure is a legitimate reason for most of what we do, so why does it fail as a reason for eating animals?",
+    "key_points": [
+      "Distinguish necessity from preference: someone stranded with no other food is in a different position from someone choosing at a supermarket, and most vegans accept that",
+      "Ask whether pleasure alone would justify causing the same harm to a dog or a person, to test whether the person thinks pleasure is ever sufficient",
+      "Acknowledge that taste and enjoyment are real, and avoid dismissing them as trivial",
+      "Avoid claiming that nobody anywhere needs animal foods; some people live where plant food is scarce"
+    ],
+    "sources": [
+      "Norcross, A. (2004). Puppies, pigs, and people: eating meat and marginal cases. Philosophical Perspectives 18: 229-245. (already cited in the bank under personal-08)",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-12",
+    "category": "ethics",
+    "difficulty": 3,
+    "reviewed": false,
+    "strongest_form": "There is no agreed method for settling moral disagreements, and moral views differ across cultures and eras. If ethics rests on conviction rather than fact, a vegan's claim that eating animals is wrong expresses a preference and has no more authority than the opposite view.",
+    "text": "Ethics is a matter of culture and personal conviction, not fact. If I don't share your moral view about animals, on what basis can you say mine is the mistaken one?",
+    "key_points": [
+      "Acknowledge that moral disagreement is real and that the philosophy of ethics is unsettled",
+      "Point out that subjectivism cuts both ways: it cannot show the vegan view is wrong either, and most people still condemn cruelty in other cases",
+      "Move from contested values to consistency: ask whether the person's own principles, such as avoiding needless suffering, apply to animals",
+      "Ask whether 'it's subjective' would be accepted as a reply if the victims were people, to check it is held consistently"
+    ],
+    "sources": [
+      "Rachels, J. The Elements of Moral Philosophy. McGraw-Hill (later editions; check the edition and year before marking reviewed).",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-13",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Once an animal has been killed, declining the meat does not bring it back, and wasting a carcass seems worse than using it. Using every part honours what was taken, and one purchase cannot change what has already happened.",
+    "text": "The animal was dead before I bought it, and I cook everything, bones included, so nothing is wasted. Buying it harms nobody, so how is it wrong?",
+    "key_points": [
+      "Acknowledge that the individual animal's death is in the past and cannot be reversed",
+      "Explain demand with care: retailers restock according to sales, so purchases are one input into what is produced next, although the effect of any single purchase is diffuse, which is the same puzzle as whether one person's choices make a difference",
+      "Note that using every part answers the problem of waste, not the question of whether the killing was necessary",
+      "Test the logic: the same reasoning would excuse buying any product made from harm that has already happened"
+    ],
+    "sources": [
+      "Kagan, S. (2011). Do I make a difference? Philosophy & Public Affairs 39(2): 105-141.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "ethics-14",
+    "category": "ethics",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "A small holding where hens live outdoors, nothing is slaughtered and animals die of old age avoids the main harms of intensive farming. If the animals are well treated and not killed, eating their eggs, or their bodies after a natural death, is not obviously exploitation.",
+    "text": "I get eggs, and meat from animals that died naturally, from a small farm or my own hens where nothing is slaughtered. Nobody suffers, so what is wrong with that?",
+    "key_points": [
+      "Acknowledge that this is very different from commercial production and that avoiding slaughter removes the central objection",
+      "Raise the practical questions: what happens to male chicks, which are killed at hatching in conventional egg production, and to hens past peak laying, whether breeds selected for high egg output suffer bone weakness and keel fractures, and whether the model scales",
+      "Distinguish the small-scale case from the supermarket case, since the argument does not justify buying commercial eggs or meat",
+      "Concede that some vegans accept this case and that the remaining disagreement is about whether eating animal bodies and products is acceptable at all"
+    ],
+    "sources": [
+      "The influence of keel bone damage on welfare of laying hens. Frontiers in Veterinary Science 5: 6 (2018). (review; author list not confirmed)",
+      "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
   {
@@ -550,11 +722,13 @@
       "Acknowledge that systemic, corporate and policy action matter a great deal",
       "Explain that food systems are a large share of global emissions and that aggregate consumption choices shape demand and markets",
       "Avoid claiming that personal diet change alone solves climate change",
-      "Note that the cited attribution study covers fossil fuel and cement producers whose products everyone uses, so it does not show that food emissions are a corporate problem and not a consumption one"
+      "Note that the cited attribution study covers fossil fuel and cement producers whose products everyone uses, so it does not show that food emissions are a corporate problem and not a consumption one",
+      "Note that FAO estimated in 2013 that livestock supply chains alone cause about 14.5 percent of human-caused emissions, that estimates vary with method, and that much higher figures circulating online come from contested analyses"
     ],
     "sources": [
       "Clark, M. A. et al. (2020). Global food system emissions could preclude achieving the 1.5 and 2 degrees C climate change targets. Science 370(6517): 705-708.",
       "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
+      "FAO (2013). Tackling climate change through livestock: a global assessment of emissions and mitigation opportunities. Rome: Food and Agriculture Organization.",
       "Heede, R. (2014). Tracing anthropogenic carbon dioxide and methane emissions to fossil fuel and cement producers, 1854-2010. Climatic Change 122: 229-241."
     ]
   },
@@ -575,6 +749,24 @@
       "Roos, E. et al. (2017). Greedy or needy? Land use and climate impacts of food in 2050 under different livestock futures. Global Environmental Change 47: 1-12 (scenario modelling of land use and emissions, cited for the livestock-as-nutrient-recycler framing only).",
       "Garnett, T. et al. (2017). Grazed and Confused? Food Climate Research Network, University of Oxford.",
       "Mottet, A. et al. (2017). Livestock: on our plates or eating at our table? A new analysis of the feed/food debate. Global Food Security 14: 1-8."
+    ]
+  },
+  {
+    "id": "environment-09",
+    "category": "environment",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Wild-caught fish need no farmland, fertiliser or feed, and many fish stocks are managed within sustainable limits. Sustainably caught seafood can be a low-impact protein that a purely plant-based argument overlooks.",
+    "text": "Wild-caught fish need no land, feed or fertiliser, and many fish stocks are well managed. Isn't sustainably caught seafood a low-impact protein that vegans are ignoring?",
+    "key_points": [
+      "Concede that some fisheries are well managed and that most fish and shellfish have lower emissions per kilogram than beef or lamb",
+      "Note that FAO assessments find more than a third of monitored marine fish stocks are fished beyond sustainable levels, although a larger share of landings comes from sustainable stocks, so 'sustainable' needs to be checked fishery by fishery",
+      "Raise bycatch, lost fishing gear and seabed damage from trawling, and that farmed fish are partly fed on crops and wild fish",
+      "Avoid the claim that the oceans will be empty by 2050, which rests on a contested projection, and keep the sentience question for the ethics items"
+    ],
+    "sources": [
+      "FAO (2024). The State of World Fisheries and Aquaculture 2024. Rome: Food and Agriculture Organization.",
+      "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992."
     ]
   },
   {
@@ -636,9 +828,11 @@
     "key_points": [
       "Acknowledge that processed vegan substitutes and specialist products can be expensive and that access varies by area",
       "Note that staples such as beans, lentils, rice, oats and seasonal vegetables are typically cheap, and compare like with like",
-      "Take time, access and skills barriers seriously instead of waving them away"
+      "Take time, access and skills barriers seriously instead of waving them away",
+      "Cite global modelling in which healthy and sustainable diets, with vegan variants generally the cheapest, cost less than current average diets in upper-middle and high-income countries but more in low and lower-middle income ones, and note that the model left out highly processed substitutes"
     ],
     "sources": [
+      "Springmann, M., Clark, M. A., Rayner, M., Scarborough, P. & Webb, P. (2021). The global and regional costs of healthy and sustainable dietary patterns: a modelling study. The Lancet Planetary Health. DOI 10.1016/S2542-5196(21)00251-5.",
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
@@ -652,7 +846,8 @@
     "key_points": [
       "Acknowledge that tone and strategy criticisms have real support, including among advocates",
       "Separate how some advocates behave from whether the underlying argument is sound",
-      "Address the strategic question of reduction versus all-or-nothing honestly"
+      "Address the strategic question of reduction versus all-or-nothing honestly",
+      "If the person has already cut down, credit that plainly and ask what the remaining exceptions are for, to tell taste and convenience apart from a principled reason, without policing them"
     ],
     "sources": [
       "Origin: common objection in online debate threads (paraphrased)"
@@ -707,6 +902,57 @@
     "sources": [
       "Kagan, S. (2011). Do I make a difference? Philosophy & Public Affairs 39(2): 105-141.",
       "Norcross, A. (2004). Puppies, pigs, and people: eating meat and marginal cases. Philosophical Perspectives 18: 229-245.",
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-10",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Farming and food processing support rural towns that have few other employers. A fast shift would cause real hardship, so a moral argument for abstaining has to account for the people whose living depends on the industry, not only the animals.",
+    "text": "Millions of people, including farmers in rural areas, depend on animal agriculture. If everyone went vegan, wouldn't whole communities lose their livelihoods?",
+    "key_points": [
+      "Acknowledge that a transition would hit rural communities hard and that this is a real cost that advocates need a plan for",
+      "Note that change would be gradual and driven by the market, with work shifting to crops, plant processing and other sectors, as in other industries that declined",
+      "Distinguish 'jobs would be lost' from 'the work is justified': employment alone is not a moral justification for a harmful practice",
+      "Avoid claiming nobody would be affected, and mention retraining and transition support as part of any serious answer"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-11",
+    "category": "personal",
+    "difficulty": 1,
+    "reviewed": false,
+    "strongest_form": "Time and attention are limited, and many people reasonably give priority to human suffering. Treating diet as a moral priority can look misplaced while people face poverty, war and injustice.",
+    "text": "There are enough human crises, from poverty to war, to fill anyone's time. Shouldn't we deal with people first before worrying about what animals eat?",
+    "key_points": [
+      "Agree that human problems are serious and that people can legitimately prioritise them",
+      "Point out that it is a false trade-off: changing what you eat takes little time away from other causes, and many vegans also work on human issues",
+      "Note that if the argument worked it would dismiss every cause except the single worst one, including the person's own",
+      "Ask whether the same objection would be made to someone campaigning against dog fighting, to check it is applied consistently"
+    ],
+    "sources": [
+      "Origin: common objection in online debate threads (paraphrased)"
+    ]
+  },
+  {
+    "id": "personal-12",
+    "category": "personal",
+    "difficulty": 2,
+    "reviewed": false,
+    "strongest_form": "Social consensus and the law reflect long collective experience and deliberation. A view held by a large majority and written into law deserves real weight, and a small minority claiming moral insight carries a heavy burden of proof.",
+    "text": "Most people think eating meat is fine, and it's perfectly legal. If almost the whole of society disagrees with you, isn't it more likely that you're the one who's wrong?",
+    "key_points": [
+      "Acknowledge that consensus is some evidence about what is reasonable, and that dissenters carry a burden of argument",
+      "Point out that majorities and laws have approved practices later seen as wrong, so neither settles the question alone",
+      "Distinguish legal from right: the law sets a minimum and many legal things are still criticised",
+      "Say what would persuade you to change your own view, which keeps the exchange honest and avoids sounding certain"
+    ],
+    "sources": [
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   }

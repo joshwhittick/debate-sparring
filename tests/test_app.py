@@ -182,9 +182,11 @@ def main():
         play_answer(client, r2["round_id"], ids2[1])
         check("answered objection can't be skipped",
               client.post(f"/rounds/{r2['round_id']}/skip", json={"objection_id": ids2[1]}).status_code == 409)
-        # 8 health items: 5 in round + 1 skipped already; skip until the bank runs dry.
+        # 5 in round + 1 replacement already used; skip until the bank runs dry, then once more.
+        n_health = sum(1 for o in json.loads(config.OBJECTIONS_PATH.read_text(encoding="utf-8"))
+                       if o["category"] == "health")
         last = None
-        for _ in range(4):
+        for _ in range(n_health - 6 + 2):
             cur = client.get(f"/rounds/{r2['round_id']}/summary").json()["objections"]
             target = next(o["objection_id"] for o in cur if o["status"] == "unanswered")
             last = client.post(f"/rounds/{r2['round_id']}/skip", json={"objection_id": target}).json()

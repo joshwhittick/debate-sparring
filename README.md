@@ -24,9 +24,9 @@ Two front ends share one core (`core.py`) and one database:
 | `.streamlit/config.toml` | Hides tracebacks from visitors, caps uploads at 5 MB, turns off usage stats |
 | `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
 | `store.py` / `config.py` | SQLite access; every tunable value (timers, round size, upload limit, prices) |
-| `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v2), `transcribe.md` |
+| `prompts/` | `followup.md`, `judge.md` (first line is `PROMPT_VERSION`, currently v3), `transcribe.md` |
 | `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
-| `data/objections.json` | Objection bank: 40 items, all `reviewed: false`. The only tracked file in `data/` |
+| `data/objections.json` | Objection bank: 53 items (nature 8, health 11, ethics 14, environment 9, personal 11), all `reviewed: false`. The only tracked file in `data/` |
 | `data/` (gitignored) | `sparring.db`, `audio/`, plus the review reports `bank_review_2026-10-27.md` and `site_gap_analysis_2026-10-27.md` |
 | `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` (browser), `selftest.json`; `fixtures/` holds a gitignored recording |
 | `requirements.txt`, `.env.example` | Python packages; env template (copy to `.env`, gitignored) |
@@ -94,6 +94,8 @@ Timers, round size, the upload and answer-length limits, the session call limit,
 | `python tests/e2e_stub.py` | A full browser round with Gemini stubbed (needs Playwright) | Free |
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
+| `python tests/measure_round_cost.py` | Plays one live round of 5 typed answers through `core` and prints tokens and cost; uses a temp DB, so `data/sparring.db` is untouched | 10 calls, under 1 cent |
+| `python tests/spike_one_call_audio.py` | M7 spike: one-call (transcribe and judge together) against the two-call path on `tests/fixtures/sample.webm` | About 3 calls per run |
 
 ## Calibration
 
@@ -101,7 +103,7 @@ Turn on Calibration mode on the start screen. On each answer you enter your own 
 
 ## Cost
 
-Measured cost per round of 5: **not yet measured** (fill in after the first live round; History shows the total spend).
+Measured cost per round of 5 typed objections: **$0.0068** on `gemini-3.1-flash-lite` (10 calls, about 15,100 tokens in and 2,000 out; 2026-10-28, `python tests/measure_round_cost.py`). That is about $0.0014 per objection. Speak turns add one transcription call each. History shows the running total spend.
 
 ## Research material
 
@@ -124,12 +126,13 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-27: Streamlit front end added. Shared logic moved from `app.py` into `core.py`; the FastAPI routes and responses are unchanged (`test_app.py` and `e2e_stub.py` pass).
 - 2026-10-27: hardened for a public deploy: fail-closed public mode, answer and output caps, session and daily spend limits, generic errors, wrapper-tag escaping for unclosed tags. The PRD and tidy logs left git.
 - 2026-10-27: repo made public and deployed to Streamlit Community Cloud at https://vegan-debate.streamlit.app/ (main file `streamlit_app.py`).
+- 2026-10-28: bank fixes from the pre-review applied, the 2 wrong citations replaced and the 7 manual checks resolved (report: `data/bank_fixes_2026-10-28.md`, gitignored). 13 items from the gap analysis added after source checks (`data/gap_shortlist_2026-10-28.md`), plus 7 key-point additions. Judge prompt v3: flags only fallacies the person commits and credits correctly naming the objection's fallacy. `--selftest --audio` passes under v3 ($0.0175). Cost per round measured.
+- 2026-10-28: M7 one-call spike run 3 times. It returns valid JSON, but it saves only about 2% and its latency varied from 4 s to 37 s, so voice stays on the two-call path for good.
 - TODO:
-  - Work through `data/bank_review_2026-10-27.md` and set `reviewed: true` per item. The bank stays a Claude draft until then.
-  - Decide which of the 14 items from the gap analysis to add.
+  - Read the changed and new items and set `reviewed: true` per item. The bank stays a Claude draft until then. Open points are listed at the end of the two reports in `data/`.
   - Rewrite the `tests/selftest.json` answers yourself.
-  - Run 20 calibration answers under prompt v2.
-  - Measure the cost per round.
+  - Run 20 calibration answers under prompt v3.
+  - M8: a full Speak-mode round in the browser, a recorder-timeout playback check, and the 90-second demo recording.
 
 ## Credit
 

@@ -8,9 +8,9 @@ Vegan-debate practice app. Spec: `debate-sparring-mvp-prd.md` (milestones M1-M8,
 - `judge.py`: Gemini calls (`make_followup`, `judge_answer`, `transcribe`, `ping`), retry budget, cost, and the `--selftest` CLI.
 - `store.py`: SQLite, one connection per call.
 - `config.py`: every tunable value. `static/` is a vanilla JS single page, mounted at `/static`.
-- Voice uses the two-call path: `transcribe`, then judge the text. The one-call spike (M7) still needs a real recording.
+- Voice uses the two-call path: `transcribe`, then judge the text. The one-call path was tested (`tests/spike_one_call_audio.py`, 2026-10-28) and dropped: about 2% cheaper, less predictable latency.
 - Re-judging overwrites the verdict but adds to tokens and cost, so total spend stays true. This deviates from the PRD wording on purpose.
-- `data/objections.json` is a Claude draft: all items are `reviewed: false` and the citations were not web-checked.
+- `data/objections.json` is a Claude draft: all 53 items are `reviewed: false` until Josh reads them. The citations were web-checked by agents on 2026-10-28; the open points are in `data/bank_fixes_2026-10-28.md` and `data/gap_shortlist_2026-10-28.md` (gitignored).
 - `tests/selftest.json` answers are Claude drafts for Josh to rewrite.
 - Never log answer text or transcripts. Never name Jack Symes in the UI.
 - Run `python tests/test_app.py` and `python tests/test_streamlit.py` after `core`/backend changes, and `python tests/e2e_stub.py` after `static/` changes.
