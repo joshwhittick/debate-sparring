@@ -12,7 +12,7 @@
       "Concede that eating meat is natural without letting 'natural' settle whether it is right"
     ],
     "sources": [
-      "Singer, P. (1975). Animal Liberation. New York Review / Random House.",
+      "Singer, P. (1975). Animal Liberation. New York: New York Review, distributed by Random House.",
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
@@ -53,18 +53,17 @@
   {
     "id": "nature-04",
     "category": "nature",
-    "difficulty": 1,
+    "difficulty": 2,
     "reviewed": false,
-    "strongest_form": "Predation drives ecosystems, and humans, as apex omnivores, do what top species have always done. Choosing not to eat animals is a moral stance, but it should be presented as that and not as a return to anything natural. The natural order includes eating and being eaten.",
-    "text": "We're at the top of the food chain. That's just the natural order, so what's the problem?",
+    "strongest_form": "Cats are obligate carnivores and need nutrients, such as taurine, that occur naturally in animal tissue. If a vegan keeps a cat, they are buying animal products in bulk, and if they refuse to keep carnivorous pets, they are leaving animals without homes. Either way the position seems to conflict with caring about animals.",
+    "text": "I feed my cat meat because cats are obligate carnivores. If animal products are wrong, isn't keeping carnivorous pets just as bad?",
     "key_points": [
-      "Separate the descriptive 'is' from the prescriptive 'ought' (the appeal to nature)",
-      "Note that people already reject many natural things and accept many unnatural ones, such as medicine",
-      "Address that industrial farming is a human-built system and not predation in the ecological sense"
+      "Concede that cats have real nutritional needs and that vets, not online advice, should guide any change to a pet's diet",
+      "Distinguish a duty to animals you have taken responsibility for from a discretionary human choice: humans are not obligate carnivores",
+      "Avoid pretending the tension is trivial, since many vegans disagree about how to handle it"
     ],
     "sources": [
-      "Origin: common objection in online debate threads (paraphrased)",
-      "Singer, P. (1975). Animal Liberation. New York Review / Random House."
+      "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
   {
@@ -125,11 +124,10 @@
     "key_points": [
       "Distinguish species-level success from individual welfare, since interests belong to individual animals and not to breeds",
       "Address that selective breeding has caused serious welfare problems in many farmed breeds",
-      "Explain why fewer farmed animals existing in future is or is not a harm to those animals"
+      "Point out that the 'partnership' framing assumes both sides chose it: farmed animals cannot consent to or leave the arrangement. Whether they would exist otherwise is a separate question (the larder argument)"
     ],
     "sources": [
-      "Diamond, J. (2002). Evolution, consequences and future of plant and animal domestication. Nature 418: 700-707.",
-      "Matheny, G. & Chan, K. M. A. (2005). Human diets and animal welfare: the illogic of the larder argument. Journal of Agricultural and Environmental Ethics 18: 579-594."
+      "Diamond, J. (2002). Evolution, consequences and future of plant and animal domestication. Nature 418: 700-707."
     ]
   },
   {
@@ -168,7 +166,7 @@
       "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
       "EFSA Panel on Dietetic Products, Nutrition and Allergies (2015). Scientific Opinion on Dietary Reference Values for cobalamin (vitamin B12). EFSA Journal 13(7): 4150.",
       "Gilsing, A. M. J. et al. (2010). Serum concentrations of vitamin B12 and folate in British male omnivores, vegetarians and vegans: results from the EPIC-Oxford cohort study. European Journal of Clinical Nutrition 64: 933-939.",
-      "NHS. The vegan diet (NHS website, Live Well: Eat well).",
+      "NHS. The vegan diet (nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/the-vegan-diet/).",
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
@@ -177,17 +175,19 @@
     "category": "health",
     "difficulty": 3,
     "reviewed": false,
-    "strongest_form": "Children are growing quickly and have less margin for error with energy, B12, iron, zinc, iodine and long-chain fatty acids. Professional bodies say well-planned vegan diets can be adequate, but 'well-planned' is doing a lot of work, and the person making the choice is the parent, not the child. Even a small rate of deficiency in this group can have lasting effects, so why accept the risk for someone who cannot consent?",
+    "strongest_form": "Children are growing quickly and have less margin for error with energy, B12, iron, zinc, iodine and long-chain fatty acids. Professional bodies differ: some say well-planned vegan diets can be adequate at every life stage, while others will not recommend them for children on the current evidence. 'Well-planned' is doing a lot of work, and the person making the choice is the parent, not the child. Even a small rate of deficiency in this group can have lasting effects, so why accept the risk for someone who cannot consent?",
     "text": "Children grow fast and can't consent. Even if vegan adults can manage, isn't it irresponsible to put a child on a diet where one planning mistake could cause lasting harm?",
     "key_points": [
       "State that well-planned vegan diets need B12 from supplements or fortified foods, and that families should consult a registered dietitian or doctor",
       "Acknowledge the higher stakes during growth and development, and that the evidence base for children is thinner than for adults",
-      "Address the consent point: parents shape children's diets in every household, so compare risks with a poorly planned omnivore diet, without dismissing the risk"
+      "Address the consent point: parents shape children's diets in every household, so compare risks with a poorly planned omnivore diet, without dismissing the risk",
+      "Note that position statements differ between bodies and have changed over time, so say which one you are relying on and avoid presenting the question as settled either way"
     ],
     "sources": [
       "Melina, V., Craig, W. & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian Diets. Journal of the Academy of Nutrition and Dietetics 116(12): 1970-1980.",
       "Sutter, D. O. & Bender, N. (2021). Nutrient status and growth in vegan children. Nutrition Research 91: 13-25.",
-      "Richter, M. et al. (2016). Vegan diet: position of the German Nutrition Society (DGE). Ernaehrungs Umschau 63(4): 92-102."
+      "Klug, A. et al. (2024). Update of the DGE position on vegan diet: position statement of the German Nutrition Society (DGE). Ernaehrungs Umschau 71(7): 60-84.",
+      "Richter, M. et al. (2016). Vegan diet: position of the German Nutrition Society (DGE). Ernaehrungs Umschau 63(4): 92-102 (earlier position, superseded by the 2024 update)."
     ]
   },
   {
@@ -248,15 +248,16 @@
     "category": "health",
     "difficulty": 2,
     "reviewed": false,
-    "strongest_form": "Large surveys find that most people who try a vegetarian or vegan diet eventually go back to eating meat. That attrition may signal that these diets are hard to sustain or leave some people feeling unwell, and individual accounts of fatigue and deficiency are too common to dismiss as people simply doing it wrong.",
+    "strongest_form": "A large online survey of US adults found that most of the people who had tried a vegetarian or vegan diet no longer followed it. That attrition may signal that these diets are hard to sustain or leave some people feeling unwell, and individual accounts of fatigue and deficiency are too common to dismiss as people simply doing it wrong.",
     "text": "Loads of people try veganism and quit because they feel awful. If it were a healthy default, would so many go back?",
     "key_points": [
-      "Acknowledge that high lapse rates are documented and that some people report feeling unwell",
-      "Separate the reasons people stop (social difficulty, convenience, cravings, poor planning, deficiency) from whether a well-planned diet is adequate",
-      "Avoid dismissing individual experience as simply 'not doing it properly'"
+      "Acknowledge that high lapse rates are documented, while noting the figure is a one-off snapshot of self-reported history and that about a third of lapsers had followed the diet for three months or less",
+      "Separate the reasons people stop (social difficulty, convenience, cravings, poor planning, deficiency) from whether a well-planned diet is adequate; in that survey most lapsers reported none of the listed health problems",
+      "Avoid dismissing individual experience as simply 'not doing it properly'",
+      "Say plainly that B12 from a supplement or fortified food is essential, and that persistent fatigue is something to raise with a GP or dietitian, not to self-diagnose"
     ],
     "sources": [
-      "Faunalytics (2014). Study of Current and Former Vegetarians and Vegans: Initial Findings.",
+      "Asher, K. et al. (2014). Study of Current and Former Vegetarians and Vegans: Initial Findings. Faunalytics (formerly Humane Research Council), with companion tables and methodology (faunalytics.org/study-of-current-and-former-vegetarians-and-vegans/).",
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
@@ -338,15 +339,17 @@
     "category": "ethics",
     "difficulty": 2,
     "reviewed": false,
-    "strongest_form": "If the reason to avoid animal products is sentience, bivalves such as mussels and oysters have no brain and almost certainly cannot suffer. By vegan logic they should be acceptable, and where vegans refuse them anyway it suggests that veganism works as an identity rule, not as a principle about harm.",
+    "strongest_form": "If the reason to avoid animal products is sentience, bivalves such as mussels and oysters are a hard case: they have no brain and only a simple nervous system, and the evidence that they can suffer is thin. By a harm-based ethic they look acceptable, and where vegans refuse them anyway it suggests that veganism works as an identity rule, not as a principle about harm.",
     "text": "Oysters and mussels have no brain. If vegans care about suffering, why isn't eating them fine?",
     "key_points": [
       "Acknowledge that bivalves are plausibly consistent with a harm-based ethic and that some vegans accept them",
-      "Explain the uncertainty about sentience, and the difference between a principle and the simple bright-line rule most vegans adopt",
+      "Say plainly that direct evidence on bivalve sentience is very limited, and that the stronger evidence for cephalopods and decapods shows the line is drawn by evidence, not by taxonomy",
+      "Explain the difference between a principle and the simple bright-line rule most vegans adopt",
       "Keep the environmental case for bivalve farming separate from the sentience question"
     ],
     "sources": [
-      "Birch, J., Burn, C., Schnell, A., Browning, H. & Crump, A. (2021). Review of the evidence of sentience in cephalopod molluscs and decapod crustaceans. London School of Economics and Political Science."
+      "Schotanus, J., van de Vis, H. & Steins, N. (2022). Welfare of bivalves in aquaculture? A first literature scan and plan for a comprehensive search. Wageningen Marine Research report C057/22 (doi.org/10.18174/577988).",
+      "Birch, J., Burn, C., Schnell, A., Browning, H. & Crump, A. (2021). Review of the evidence of sentience in cephalopod molluscs and decapod crustaceans. London School of Economics and Political Science (cited for the cephalopod and decapod contrast only; it does not cover bivalves)."
     ]
   },
   {
@@ -409,10 +412,10 @@
     "category": "ethics",
     "difficulty": 3,
     "reviewed": false,
-    "strongest_form": "Steven Davis argued that a diet including grazed cattle could kill fewer animals per unit of food than a crop-based diet, because ploughing and harvesting kill many field animals and one cow supplies a lot of food. The estimates are contested, but the point stands: a least-harm principle does not obviously deliver veganism, and the vegan has to win the argument on the numbers.",
+    "strongest_form": "A published philosophical argument holds that a diet including grazed cattle could kill fewer animals per unit of food than a crop-based diet, because ploughing and harvesting kill many field animals and one cow supplies a lot of food. The estimates are contested, but the point stands: a least-harm principle does not obviously deliver veganism, and the vegan has to win the argument on the numbers.",
     "text": "One grass-fed cow feeds a lot of people, while harvesting grain kills lots of small animals. By a least-harm standard, couldn't a bit of grazed beef be better than a vegan diet?",
     "key_points": [
-      "Address the arithmetic: critics argue Davis's estimates left out feed crops, per-calorie comparisons and land use",
+      "Address the arithmetic: critics argue the original estimates left out feed crops, per-calorie comparisons and land use",
       "Note that field deaths are hard to quantify and that a fair comparison includes animals killed for feed and wild animals displaced by pasture",
       "Acknowledge that least harm is shared ground and that the conclusion depends on empirical data, not on the principle alone"
     ],
@@ -503,17 +506,17 @@
     "category": "environment",
     "difficulty": 1,
     "reviewed": false,
-    "strongest_form": "Almonds and avocados are water-intensive and often grown in drought-prone regions. Replacing dairy with plant milks can swap one environmental problem for another, and treating plant-based as automatically green ignores the water and land trade-offs of specific crops.",
+    "strongest_form": "Almonds are water-intensive and often grown in drought-prone regions. Replacing dairy with plant milks can swap one environmental problem for another, and treating plant-based as automatically green ignores the water and land trade-offs of specific crops.",
     "text": "Almond milk uses tons of water. Isn't swapping dairy for plant milks just trading one environmental problem for another?",
     "key_points": [
       "Acknowledge that almonds are water-intensive and are often grown in water-stressed regions",
-      "Compare plant milks on a like-for-like basis (emissions, land and water per litre), including oat and soy against dairy",
+      "Compare plant milks like for like (emissions, land and water per litre): on Our World in Data's figures almond milk uses less freshwater than dairy but far more than oat or soy",
       "Note that choosing plant-based does not mean choosing almond milk"
     ],
     "sources": [
       "Poore, J. & Nemecek, T. (2018). Reducing food's environmental impacts through producers and consumers. Science 360(6392): 987-992.",
-      "Mekonnen, M. M. & Hoekstra, A. Y. (2012). A global assessment of the water footprint of farm animal products. Ecosystems 15: 401-415.",
-      "Our World in Data. Environmental impacts of food production (ourworldindata.org/environmental-impacts-of-food).",
+      "Ritchie, H. (2022). Dairy vs. plant-based milk: what are the environmental impacts? Our World in Data (ourworldindata.org/environmental-impact-milks).",
+      "Ritchie, H., Rosado, P. & Roser, M. (2022). Environmental impacts of food production. Our World in Data (ourworldindata.org/environmental-impacts-of-food).",
       "Origin: common objection in online debate threads (paraphrased)"
     ]
   },
@@ -541,12 +544,13 @@
     "category": "environment",
     "difficulty": 2,
     "reviewed": false,
-    "strongest_form": "A relatively small number of large companies are responsible for most industrial emissions. Asking individuals to change their dinner shifts attention and blame from fossil-fuel and agribusiness giants onto consumers, and any single person's diet change makes no measurable difference to the climate. Policy and industry change is where the leverage is.",
+    "strongest_form": "A relatively small number of large producers account for most industrial emissions, and fossil-fuel companies in particular have shaped the climate debate for decades. Asking individuals to change their dinner shifts attention and blame onto consumers. Policy and industry change is where the leverage is.",
     "text": "A handful of huge companies produce most emissions. Isn't telling individuals to change what they eat just shifting the blame?",
     "key_points": [
       "Acknowledge that systemic, corporate and policy action matter a great deal",
       "Explain that food systems are a large share of global emissions and that aggregate consumption choices shape demand and markets",
-      "Avoid claiming that personal diet change alone solves climate change"
+      "Avoid claiming that personal diet change alone solves climate change",
+      "Note that the cited attribution study covers fossil fuel and cement producers whose products everyone uses, so it does not show that food emissions are a corporate problem and not a consumption one"
     ],
     "sources": [
       "Clark, M. A. et al. (2020). Global food system emissions could preclude achieving the 1.5 and 2 degrees C climate change targets. Science 370(6517): 705-708.",
@@ -567,7 +571,8 @@
       "Avoid claiming that vegan-organic farming is proven at global scale"
     ],
     "sources": [
-      "Roos, E. et al. (2017). Greedy or needy? Land use and climate impacts of food in 2050 under different livestock futures. Global Environmental Change 47: 1-12.",
+      "Billen, G. et al. (2021). Reshaping the European agro-food system and closing its nitrogen cycle: the potential of combining dietary change, agroecology, and circularity. One Earth 4(6): 839-850.",
+      "Roos, E. et al. (2017). Greedy or needy? Land use and climate impacts of food in 2050 under different livestock futures. Global Environmental Change 47: 1-12 (scenario modelling of land use and emissions, cited for the livestock-as-nutrient-recycler framing only).",
       "Garnett, T. et al. (2017). Grazed and Confused? Food Climate Research Network, University of Oxford.",
       "Mottet, A. et al. (2017). Livestock: on our plates or eating at our table? A new analysis of the feed/food debate. Global Food Security 14: 1-8."
     ]
