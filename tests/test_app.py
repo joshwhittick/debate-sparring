@@ -22,6 +22,7 @@ config.GEMINI_TIER = "paid"
 config.VOICE_ON_FREE_TIER = False
 
 import judge  # noqa: E402
+import store  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
 
 USAGE = {"model": "stub", "input_tokens": 100, "output_tokens": 50, "cost_usd": 0.001}
@@ -115,7 +116,22 @@ def main():
         big = {"audio": ("big.webm", b"0" * (config.MAX_UPLOAD_MB * 1024 * 1024 + 1), "audio/webm")}
         check("oversize 413", client.post("/answers", data={"round_id": rid, "objection_id": objs[2]["id"],
                                                             "mode": "speak"}, files=big).status_code == 413)
-        client.delete(f"/answers/{sid}/audio")
+        before = store.get_answer(sid)
+        check("recordings recorded before delete", bool(before["opener_audio_path"] and before["reply_audio_path"])
+              and all((config.AUDIO_DIR / before[f"{t}_audio_path"]).exists() for t in ("opener", "reply")))
+        check("delete audio 200", client.delete(f"/answers/{sid}/audio").status_code == 200)
+        row = store.get_answer(sid)
+        check("delete removes the files from disk",
+              not any((config.AUDIO_DIR / before[f"{t}_audio_path"]).exists() for t in ("opener", "reply")))
+        check("delete nulls both *_audio_path columns",
+              row["opener_audio_path"] is None and row["reply_audio_path"] is None)
+        check("delete keeps transcript, scores and cost",
+              json.loads(row["transcript_json"])["reply"] == "spoken words" and row["overall"] == 4
+              and row["cost_usd"] > 0)
+        deleted_lines = [ln for ln in (config.LOG_DIR / "app.log").read_text(encoding="utf-8").splitlines()
+                         if "recordings deleted" in ln]
+        check("delete is logged by id only", len(deleted_lines) == 1 and f"answer_id={sid}" in deleted_lines[0]
+              and "spoken words" not in deleted_lines[0] and "steady" not in deleted_lines[0])
         after = client.get(f"/answers/{sid}").json()
         check("audio deleted", not after["has_opener_audio"] and not after["has_reply_audio"]
               and not list(config.AUDIO_DIR.glob(f"{sid}_*")))
@@ -175,6 +191,7 @@ def main():
         check("exhausted bank shrinks round", last["objection"] is None)
 
         config.GEMINI_TIER = "free"
+        check("config speak_enabled false on free tier", client.get("/config").json()["speak_enabled"] is False)
         check("speak blocked on free tier",
               client.post("/answers", data={"round_id": rid, "objection_id": objs[0]["id"], "mode": "speak"},
                           files={"audio": ("a.webm", b"x", "audio/webm")}).status_code == 403)
