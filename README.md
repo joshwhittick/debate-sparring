@@ -21,6 +21,7 @@ Two front ends share one core (`core.py`) and one database:
 | `app.py` | FastAPI routes over `core`, startup checks (exits on a bad bank or rejected key) |
 | `streamlit_app.py` | Streamlit front end over `core`: Practice and History pages |
 | `.streamlit/secrets.toml.example` | Template for Streamlit Cloud secrets (`secrets.toml` itself is gitignored) |
+| `.devcontainer/devcontainer.json` | GitHub Codespaces setup (Streamlit's template, added 2026-10-28): Python 3.11, installs `requirements.txt`, runs `streamlit run streamlit_app.py` on port 8501 with CORS and XSRF protection off |
 | `.streamlit/config.toml` | Hides tracebacks from visitors, caps uploads at 5 MB, turns off usage stats |
 | `judge.py` | Gemini calls (follow-up, judge, transcribe, ping), retries, cost, and the `--selftest` CLI |
 | `whisper_local.py` | Local speech-to-text with faster-whisper, used instead of Gemini transcription when `TRANSCRIBER=whisper` |
@@ -53,6 +54,7 @@ At startup either front end validates the objection bank, then checks the key wi
 2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`. Not `app.py`: that starts FastAPI, which never sees the Cloud secrets and exits with "GEMINI_API_KEY is not set".
 3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key, a random `APP_PASSWORD` of 20+ characters and a `DAILY_SPEND_LIMIT_USD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
 4. Set a budget alert or quota cap on the Gemini key in Google Cloud as a second limit.
+5. For Speak mode without sending audio to Google, add `TRANSCRIBER = "whisper"`. The container downloads the Whisper model on each restart. **TODO:** check Whisper speed and memory on Cloud; drop to `WHISPER_MODEL = "base.en"` if `small.en` is too slow.
 
 The Streamlit app runs in **public mode** on Streamlit Cloud, on any host other than localhost, or with `PUBLIC_DEPLOY=1`. It fails closed:
 
