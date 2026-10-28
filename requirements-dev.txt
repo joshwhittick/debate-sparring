@@ -1,0 +1,3 @@
+# Test-only. Starlette's TestClient prefers httpx2 and warns when it falls back to httpx.
+-r requirements.txt
+httpx2

@@ -29,7 +29,7 @@ Two front ends share one core (`core.py`) and one database:
 | `data/objections.json` | Objection bank: 53 items (nature 8, health 11, ethics 14, environment 9, personal 11), all `reviewed: false`. The only tracked file in `data/` |
 | `data/` (gitignored) | `sparring.db`, `audio/`, plus the review reports `bank_review_2026-10-27.md` and `site_gap_analysis_2026-10-27.md` |
 | `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` (browser), `selftest.json`; `fixtures/` holds a gitignored recording |
-| `requirements.txt`, `.env.example` | Python packages; env template (copy to `.env`, gitignored) |
+| `requirements.txt`, `requirements-dev.txt`, `.env.example` | Python packages (runtime; dev adds `httpx2`, which Starlette's TestClient prefers over `httpx`); env template (copy to `.env`, gitignored) |
 | `logs/` (gitignored) | `app.log`, rotating; ids, timings and cost only |
 | `CLAUDE.md` | Agent context |
 | `research/carnismdebunked/` | Scraper and local copy of carnismdebunked.com (see Research material) |
@@ -86,6 +86,8 @@ Timers, round size, the upload and answer-length limits, the session call limit,
 - `logs/app.log` holds ids, timings, token counts and cost only. It never holds answer text or transcripts.
 
 ## Tests
+
+Install `requirements-dev.txt` first; without `httpx2` the tests still pass but print a Starlette deprecation warning.
 
 | Command | What it checks | Cost |
 |---|---|---|
