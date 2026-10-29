@@ -11,7 +11,7 @@ Two front ends share one core (`core.py`) and one database:
 | Front end | Run | Notes |
 |---|---|---|
 | Local web app (FastAPI + vanilla JS) | `python app.py` -> http://127.0.0.1:8000 | Timers auto-submit after the grace period; records WebM in the browser |
-| Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. Public mode off localhost (see below) |
+| Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. "Read objections aloud" speaks the objection and pushback with the browser voice (with a Read again button) and holds the clock for the estimated reading time. Public mode off localhost (see below) |
 
 ## Contents
 
@@ -104,6 +104,7 @@ Install `requirements-dev.txt` first; without `httpx2` the tests still pass but 
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
 | `python tests/measure_round_cost.py` | Plays one live round of 5 typed answers through `core` and prints tokens and cost; uses a temp DB, so `data/sparring.db` is untouched | 10 calls, under 1 cent |
 | `python tests/check_whisper.py [PATH] [--model base.en]` | Local Whisper on a real recording (default `tests/fixtures/sample.webm`): load time, transcription time, transcript | Free; first run downloads the model |
+| `python tests/check_read_aloud.py [URL]` | Headless Chromium against a running Streamlit app (default http://localhost:8501): read-aloud speaks the objection once, Read again repeats it, the clock waits | Free apart from the app's startup ping; needs Playwright |
 | `python tests/spike_one_call_audio.py` | M7 spike: one-call (transcribe and judge together) against the two-call path on `tests/fixtures/sample.webm` | About 3 calls per run |
 
 ## Calibration
@@ -139,6 +140,7 @@ python research/carnismdebunked/scrape_carnismdebunked.py parse   # raw/ -> page
 - 2026-10-28: M7 one-call spike run 3 times. It returns valid JSON, but it saves only about 2% and its latency varied from 4 s to 37 s, so voice stays on the two-call path for good.
 - 2026-10-28: health-02 and health-03 cite the Academy of Nutrition and Dietetics 2025 adults paper (the 2016 paper stays for all life stages). `requirements-dev.txt` adds `httpx2` for the tests (commit `f610fb3`).
 - 2026-10-28: optional local Whisper transcription (`TRANSCRIBER=whisper`), which enables Speak mode on the free tier without sending audio to Google. On the 50-second sample (on Josh's laptop CPU), `small.en` took 6.8 s and gave a clean transcript; `base.en` took 2.5 s and garbled several words. The model warms up in a background thread at startup.
+- 2026-10-29: Streamlit gets read-aloud (browser speech for the objection and pushback), matching the FastAPI page. It runs via `st.html` in the page rather than an iframe, so the Start round click satisfies the browser's gesture rule.
 - TODO (checklist in `data/YOUR_TODO.md`):
   - Read the changed and new items and set `reviewed: true` per item. The bank stays a Claude draft until then. Open points are listed at the end of the two reports in `data/`.
   - Rewrite the `tests/selftest.json` answers yourself.

@@ -8,6 +8,7 @@ without APP_PASSWORD, hides History and calibration (the database is shared by e
 per session and deletes recordings once judged.
 """
 import hmac
+import json
 import os
 import time
 
@@ -40,6 +41,7 @@ else:
                     "its products, and people may listen to it.")
 SPENDING = {"start_answer", "retry_followup", "submit_reply", "rejudge"}  # core calls that reach Gemini
 LOCAL_HOSTS = {"localhost", "127.0.0.1", "[::1]", "::1"}
+READ_WPS = 2.5  # browser voice speed, words per second; a read-aloud turn's clock starts after the estimate
 DIM_LABELS = {"accuracy": "Accuracy", "logic": "Logic", "crux": "Crux", "concision": "Concision",
               "concession_discipline": "Concession discipline"}
 
@@ -137,7 +139,7 @@ def recover_duplicate():
         obj_id = rnd["objections"][rnd["idx"]]["id"]
         row = next((a for a in store.round_answers(rnd["id"]) if a["objection_id"] == obj_id), None)
         if row:
-            ss.answer_id, ss.turn_started = row["id"], time.time()
+            ss.answer_id, ss.turn_started = row["id"], clock_start(row["followup_text"])
             ss.phase = "reply" if row["followup_text"] else "followup_failed"
             st.rerun()
     elif ss.phase == "reply" and ss.answer_id:
@@ -148,12 +150,19 @@ def recover_duplicate():
 
 # --- round state ---
 
-def start_round(category, study, shuffle, calibration, reviewer):
+def start_round(category, study, shuffle, calibration, reviewer, read_aloud):
     out = call(core.new_round, category, study, shuffle)
     if out:
         ss.round = {"id": out["round_id"], "objections": out["objections"], "idx": 0, "study": study,
-                    "calibration": calibration, "reviewer": reviewer}
+                    "calibration": calibration, "reviewer": reviewer, "read_aloud": read_aloud}
         begin_objection()
+
+
+def clock_start(text):
+    """When the turn clock starts: now, or after the estimated reading time when reading aloud."""
+    if not (ss.round.get("read_aloud") and text):
+        return time.time()
+    return time.time() + 1 + len(text.split()) / READ_WPS
 
 
 def begin_objection():
@@ -161,7 +170,8 @@ def begin_objection():
     if rnd["idx"] >= len(rnd["objections"]):
         ss.phase = "summary"
         return
-    ss.phase, ss.answer_id, ss.result, ss.turn_started = "opener", None, None, time.time()
+    ss.phase, ss.answer_id, ss.result = "opener", None, None
+    ss.turn_started = clock_start(rnd["objections"][rnd["idx"]]["text"])
 
 
 def next_objection():
@@ -178,12 +188,39 @@ def end_round():
 @st.fragment(run_every=1)
 def countdown(limit):
     left = limit - (time.time() - ss.turn_started)
-    if left > 0:
+    if left > limit:
+        st.caption("Reading aloud - the clock starts after.")
+    elif left > 0:
         st.progress(left / limit, text=f"{int(left)} s left")
     elif left > -config.GRACE_S:
         st.warning("Time's up - finish your sentence")
     else:
         st.error("Time's up - submit now")
+
+
+def read_aloud(text, key):
+    """Speaks text once per key with the browser's voice, plus a Read again button. Runs in the page, not an
+    iframe, so the click that started the round counts as the user gesture browsers require for speech."""
+    if not (ss.round.get("read_aloud") and text):
+        return
+    # json.dumps makes a safe JS string; escaping < stops LLM text closing the script tag
+    say, k = (json.dumps(v).replace("<", "\\u003c") for v in (text, f"spoken_{key}"))
+    st.html(f"""<button id="ra_{key}" type="button">Read again</button>
+<script>(() => {{
+  const synth = window.speechSynthesis;
+  if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return;
+  const speak = () => {{
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance({say});
+    u.lang = 'en-GB';
+    synth.speak(u);
+  }};
+  const btn = document.getElementById('ra_{key}');
+  if (btn) btn.onclick = speak;
+  let done = false;
+  try {{ done = sessionStorage.getItem({k}) === '1'; sessionStorage.setItem({k}, '1'); }} catch (e) {{}}
+  if (!done) speak();
+}})();</script>""", unsafe_allow_javascript=True)
 
 
 def turn_input(turn, key):
@@ -269,12 +306,14 @@ def start_screen():
                                 format_func=lambda c: c.capitalize() if c else "All")
         study = st.checkbox("Study mode (untimed)")
         shuffle = st.checkbox("Shuffle (ignore how often each objection has come up)")
+        read_aloud = st.checkbox("Read objections aloud", help="Uses your browser's voice. The clock starts after "
+                                 "the estimated reading time.")
         calibration, reviewer = False, None
         if not ss.public:  # calibration stats are shared, so only offered locally
             calibration = st.checkbox("Calibration mode (score yourself before seeing feedback)")
             reviewer = st.selectbox("Reviewer", ["josh", "second"])
         if st.form_submit_button("Start round", type="primary"):
-            start_round(category, study, shuffle, calibration, reviewer)
+            start_round(category, study, shuffle, calibration, reviewer, read_aloud)
             st.rerun()
     if not core.speak_enabled():
         st.caption("Speak mode is off: it needs TRANSCRIBER=whisper, GEMINI_TIER=paid or VOICE_ON_FREE_TIER=1.")
@@ -294,13 +333,14 @@ def opener_screen():
     rnd = ss.round
     obj = objection_header()
     key = f"{rnd['id']}_{obj['id']}_opener"
+    read_aloud(obj["text"], key)
     submitted = turn_input("opener", key)
     if submitted:
         mode, text, data, mime = submitted
         with st.spinner("Getting the pushback..."):
             out = call(core.start_answer, rnd["id"], obj["id"], mode, text, data, mime or "audio/webm")
         if out:
-            ss.answer_id, ss.phase, ss.turn_started = out["answer_id"], "reply", time.time()
+            ss.answer_id, ss.phase, ss.turn_started = out["answer_id"], "reply", clock_start(out["followup_text"])
             st.rerun()
     left, right = st.columns(2)
     if left.button("Skip this objection"):
@@ -324,8 +364,9 @@ def followup_failed_screen():
     objection_header()
     st.error("Couldn't get the pushback. Your opener is saved.")
     if st.button("Retry", type="primary"):
-        if call(core.retry_followup, ss.answer_id):
-            ss.phase, ss.turn_started = "reply", time.time()
+        followup = call(core.retry_followup, ss.answer_id)
+        if followup:
+            ss.phase, ss.turn_started = "reply", clock_start(followup)
             st.rerun()
     if st.button("Skip to next objection"):
         next_objection()
@@ -338,6 +379,7 @@ def reply_screen():
     with st.expander("Your opener", expanded=False):
         st.write(answer["opener_text"] or "(nothing transcribed)")
     st.info(f"**Pushback:** {answer['followup_text']}")
+    read_aloud(answer["followup_text"], f"{ss.answer_id}_reply")
     submitted = turn_input("reply", f"{ss.answer_id}_reply")
     if submitted:
         mode, text, data, mime = submitted

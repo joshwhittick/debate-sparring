@@ -88,7 +88,7 @@ def public_checks():
           and not any(b.label == "Start round" for b in at.button))
     at.text_input[0].input("pw-test").run()
     check("right password opens the app", any(b.label == "Start round" for b in at.button))
-    check("public mode hides History and calibration", not at.sidebar.radio and len(at.checkbox) == 2)
+    check("public mode hides History and calibration", not at.sidebar.radio and len(at.checkbox) == 3)
 
     config.SESSION_CALL_LIMIT = 1
     button(at, "Start round").click().run()
@@ -135,7 +135,7 @@ def main():
     at = AppTest.from_file(str(ROOT / "streamlit_app.py"), default_timeout=30)
     at.run()
     at.checkbox[0].check()
-    at.checkbox[2].check()  # calibration mode
+    at.checkbox[3].check()  # calibration mode
     button(at, "Start round").click().run()
     at.text_area[0].input("opener").run()
     button(at, "Submit").click().run()
@@ -158,6 +158,18 @@ def main():
     at.text_area[0].input("second click").run()
     button(at, "Submit").click().run()
     check("double submit recovers to the pushback", "But what about X?" in texts(at) and not at.exception)
+
+    at = AppTest.from_file(str(ROOT / "streamlit_app.py"), default_timeout=30)
+    at.run()
+    at.checkbox[0].check()
+    at.checkbox[2].check()  # read aloud
+    button(at, "Start round").click().run()
+    obj_text = at.session_state["round"]["objections"][0]["text"]
+    check("read aloud speaks the objection", any("speechSynthesis" in h.body and json.dumps(obj_text).replace("<", "\\u003c") in h.body
+                                                 for h in at.get("html")))
+    at.text_area[0].input("opener").run()
+    button(at, "Submit").click().run()
+    check("read aloud speaks the pushback", any('"But what about X?"' in h.body for h in at.get("html")))
 
     at = AppTest.from_file(str(ROOT / "streamlit_app.py"), default_timeout=30)
     at.run()
