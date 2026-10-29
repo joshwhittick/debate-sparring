@@ -10,7 +10,7 @@ Two front ends share one core (`core.py`) and one database:
 
 | Front end | Run | Notes |
 |---|---|---|
-| Local web app (FastAPI + vanilla JS) | `python app.py` -> http://127.0.0.1:8000 | Timers auto-submit after the grace period; records WebM in the browser |
+| Local web app (FastAPI + vanilla JS) | `python app.py` -> http://127.0.0.1:8000 | Timers auto-submit after the grace period; records WebM in the browser. Optional "Read objections aloud" (browser voice); the clock starts when reading ends |
 | Streamlit | `streamlit run streamlit_app.py` -> http://localhost:8501 | Runs locally or on Streamlit Community Cloud. The countdown shows "Time's up" but does not auto-submit; records WAV via `st.audio_input`. "Read objections aloud" speaks the objection and pushback with the browser voice (with a Read again button) and holds the clock for the estimated reading time. Public mode off localhost (see below) |
 
 ## Contents
@@ -19,7 +19,7 @@ Two front ends share one core (`core.py`) and one database:
 |---|---|
 | `core.py` | Shared logic: bank loading and validation, round/answer flow, judging, calibration, summaries, history. Raises `CoreError(status, code)` |
 | `app.py` | FastAPI routes over `core`, startup checks (exits on a bad bank or rejected key) |
-| `streamlit_app.py` | Streamlit front end over `core`: Practice and History pages |
+| `streamlit_app.py` | Streamlit front end over `core`: Practice and History pages, Speak mode via `st.audio_input`, read-aloud via `st.html` |
 | `.streamlit/secrets.toml.example` | Template for Streamlit Cloud secrets (`secrets.toml` itself is gitignored) |
 | `.devcontainer/devcontainer.json` | GitHub Codespaces setup (Streamlit's template, added 2026-10-28): Python 3.11, installs `requirements.txt`, runs `streamlit run streamlit_app.py` on port 8501 with CORS and XSRF protection off |
 | `.streamlit/config.toml` | Hides tracebacks from visitors, caps uploads at 5 MB, turns off usage stats |
@@ -30,7 +30,7 @@ Two front ends share one core (`core.py`) and one database:
 | `static/` | Single-page frontend (`index.html`, `app.js`, `style.css`) |
 | `data/objections.json` | Objection bank: 53 items (nature 8, health 11, ethics 14, environment 9, personal 11), all `reviewed: false`. The only tracked file in `data/` |
 | `data/` (gitignored) | `sparring.db`, `audio/`, Josh's checklist `YOUR_TODO.md`, and the review reports `bank_review_2026-10-27.md`, `site_gap_analysis_2026-10-27.md`, `bank_fixes_2026-10-28.md` and `gap_shortlist_2026-10-28.md` |
-| `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` (browser), `selftest.json`; `fixtures/` holds a gitignored recording |
+| `tests/` | `test_app.py` (FastAPI routes), `test_streamlit.py` (Streamlit `AppTest`), `e2e_stub.py` and `check_read_aloud.py` (browser), `check_whisper.py`, `measure_round_cost.py`, `spike_one_call_audio.py`, `selftest.json`; `fixtures/` holds a gitignored recording. See Tests |
 | `requirements.txt`, `requirements-dev.txt`, `.env.example` | Python packages (runtime; dev adds `httpx2`, which Starlette's TestClient prefers over `httpx`); env template (copy to `.env`, gitignored) |
 | `logs/` (gitignored) | `app.log`, rotating; ids, timings and cost only |
 | `CLAUDE.md` | Agent context |
@@ -54,7 +54,7 @@ At startup either front end validates the objection bank, then checks the key wi
 2. On share.streamlit.io, create an app from the repo with main file `streamlit_app.py`. Not `app.py`: that starts FastAPI, which never sees the Cloud secrets and exits with "GEMINI_API_KEY is not set".
 3. Paste the keys from `.streamlit/secrets.toml.example` into the app's Secrets, with your key, a random `APP_PASSWORD` of 20+ characters and a `DAILY_SPEND_LIMIT_USD`. Root-level secrets are copied into the environment, so `config.py` reads them like `.env` values.
 4. Set a budget alert or quota cap on the Gemini key in Google Cloud as a second limit.
-5. For Speak mode without sending audio to Google, add `TRANSCRIBER = "whisper"`. The container downloads the Whisper model on each restart. **TODO:** check Whisper speed and memory on Cloud; drop to `WHISPER_MODEL = "base.en"` if `small.en` is too slow.
+5. For Speak mode without sending audio to Google, set `TRANSCRIBER = "whisper"` (already in the template, so it only needs adding if the Secrets predate it). The container downloads the Whisper model on each restart. **TODO:** check Whisper speed and memory on Cloud; drop to `WHISPER_MODEL = "base.en"` if `small.en` is too slow.
 
 The Streamlit app runs in **public mode** on Streamlit Cloud, on any host other than localhost, or with `PUBLIC_DEPLOY=1`. It fails closed:
 
@@ -98,7 +98,7 @@ Install `requirements-dev.txt` first; without `httpx2` the tests still pass but 
 | Command | What it checks | Cost |
 |---|---|---|
 | `python tests/test_app.py` | Every route, with Gemini stubbed | Free |
-| `python tests/test_streamlit.py` | The Streamlit app via `AppTest`: round, skip, feedback, calibration, summary, history, double-submit recovery, and public mode (password gate, hidden pages, session and daily limits, answer cap); Gemini stubbed | Free |
+| `python tests/test_streamlit.py` | The Streamlit app via `AppTest`: round, skip, feedback, calibration, summary, history, double-submit recovery, read-aloud, and public mode (password gate, hidden pages, session and daily limits, answer cap); Gemini stubbed | Free |
 | `python tests/e2e_stub.py` | A full browser round with Gemini stubbed (needs Playwright) | Free |
 | `python judge.py --selftest [--model X] [--repeat 3]` | Live judge sanity: strong beats weak, empty scores low, wrong answer flagged, injection flagged | About 18 judge calls |
 | `python judge.py --selftest --audio [PATH]` | Adds the voice transcription case (default `tests/fixtures/sample.webm`) | One more call |
