@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-google-genai
+google-genai>=2.30,<3
+httpx
 python-dotenv
 python-multipart
 streamlit
